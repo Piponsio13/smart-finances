@@ -18,6 +18,10 @@ export interface CreateBudgetRequest {
   year: number;
 }
 
+export interface UpdateBudgetRequest {
+  monthlyLimit: number;
+}
+
 export const budgetsApi = {
   getAll: () =>
     fetch(`${BASE_URL}/api/budgets`, { headers: getHeaders() })
@@ -29,6 +33,13 @@ export const budgetsApi = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<null>(res)),
+
+  update: (id: number, data: UpdateBudgetRequest) =>
+    fetch(`${BASE_URL}/api/budgets/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    }).then((res) => handleResponse<Budget>(res)),
 
   delete: (id: number) =>
     fetch(`${BASE_URL}/api/budgets/${id}`, {

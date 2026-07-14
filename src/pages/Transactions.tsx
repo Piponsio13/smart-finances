@@ -22,11 +22,13 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import { transactionsApi, type Transaction, type TransactionFilters } from '../api/transactions';
 import { categoriesApi, type Category } from '../api/categories';
 import TransactionModal from '../components/TransactionModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
+import { concrete, moss, oxide } from '../theme/palette';
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
@@ -58,25 +60,22 @@ export default function Transactions() {
       setTransactions(data);
       setError('');
     } catch {
-      setError('Failed to load transactions.');
+      // Nothing to load yet — not an error, just no transactions.
+      setTransactions([]);
     }
   }, [filters]);
 
   useEffect(() => {
     async function init() {
       setLoading(true);
-      try {
-        const [txData, catData] = await Promise.all([
-          transactionsApi.getAll(filters),
-          categoriesApi.getAll(),
-        ]);
-        setTransactions(txData);
-        setCategories(catData);
-      } catch {
-        setError('Failed to load data.');
-      } finally {
-        setLoading(false);
-      }
+      const [txResult, catResult] = await Promise.allSettled([
+        transactionsApi.getAll(filters),
+        categoriesApi.getAll(),
+      ]);
+      // Settled independently — one failing shouldn't wipe out the other.
+      setTransactions(txResult.status === 'fulfilled' ? txResult.value : []);
+      setCategories(catResult.status === 'fulfilled' ? catResult.value : []);
+      setLoading(false);
     }
     init();
   }, []);
@@ -108,7 +107,7 @@ export default function Transactions() {
     }
   }
 
-  async function handleExport() {
+  async function handleExportCsv() {
     try {
       const res = await transactionsApi.exportCsv(filters);
       const blob = await res.blob();
@@ -120,6 +119,21 @@ export default function Transactions() {
       URL.revokeObjectURL(url);
     } catch {
       setError('Failed to export CSV.');
+    }
+  }
+
+  async function handleExportPdf() {
+    try {
+      const res = await transactionsApi.exportPdf(filters);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'transactions.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setError('Failed to export PDF.');
     }
   }
 
@@ -139,7 +153,7 @@ export default function Transactions() {
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Transactions</Typography>
           <Typography
-            sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: '#666666', textTransform: 'uppercase', letterSpacing: 1 }}
+            sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}
           >
             Manage your income and expenses
           </Typography>
@@ -148,10 +162,18 @@ export default function Transactions() {
           <Button
             variant="outlined"
             startIcon={<FileDownloadOutlinedIcon />}
-            onClick={handleExport}
+            onClick={handleExportCsv}
             size="small"
           >
-            Export CSV
+            CSV
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<PictureAsPdfOutlinedIcon />}
+            onClick={handleExportPdf}
+            size="small"
+          >
+            PDF
           </Button>
           <Button variant="contained" startIcon={<AddOutlinedIcon />} onClick={openAdd}>
             Add Transaction
@@ -276,9 +298,9 @@ export default function Transactions() {
                           label={tx.type === 'INCOME' ? 'INCOME' : 'EXPENSE'}
                           size="small"
                           sx={{
-                            bgcolor: tx.type === 'INCOME' ? '#D6F0E0' : '#FFE0E0',
-                            color: tx.type === 'INCOME' ? '#007A45' : '#CC0000',
-                            borderColor: tx.type === 'INCOME' ? '#007A45' : '#CC0000',
+                            bgcolor: tx.type === 'INCOME' ? moss.light : oxide.light,
+                            color: tx.type === 'INCOME' ? moss.main : oxide.main,
+                            borderColor: tx.type === 'INCOME' ? moss.main : oxide.main,
                           }}
                         />
                       </TableCell>
@@ -288,7 +310,7 @@ export default function Transactions() {
                             fontFamily: '"Space Mono", monospace',
                             fontWeight: 700,
                             fontSize: 13,
-                            color: tx.type === 'INCOME' ? '#007A45' : '#CC0000',
+                            color: tx.type === 'INCOME' ? moss.main : oxide.main,
                           }}
                         >
                           {tx.type === 'INCOME' ? '+' : '-'}

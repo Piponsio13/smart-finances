@@ -6,7 +6,6 @@ import {
   Typography,
   LinearProgress,
   Skeleton,
-  Alert,
   Grid,
 } from '@mui/material';
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
@@ -15,6 +14,7 @@ import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalance
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { dashboardApi, type DashboardData } from '../api/dashboard';
 import { transactionsApi, type Transaction } from '../api/transactions';
+import { concrete, moss, oxide } from '../theme/palette';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -53,7 +53,7 @@ function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: 1.5,
-                color: '#666666',
+                color: concrete.aggregate,
                 fontFamily: '"Space Mono", monospace',
               }}
             >
@@ -76,7 +76,7 @@ function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
               width: 36,
               height: 36,
               bgcolor: bgColor,
-              border: '2px solid #000000',
+              border: `2px solid ${concrete.void}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -96,22 +96,17 @@ export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [recent, setRecent] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const [dashboard, transactions] = await Promise.all([
-          dashboardApi.get(),
-          transactionsApi.getAll(),
-        ]);
-        setData(dashboard);
-        setRecent(transactions.slice(0, 5));
-      } catch {
-        setError('Failed to load dashboard data.');
-      } finally {
-        setLoading(false);
-      }
+      const [dashboardResult, txResult] = await Promise.allSettled([
+        dashboardApi.get(),
+        transactionsApi.getAll(),
+      ]);
+      // Settled independently — one failing shouldn't wipe out the other.
+      setData(dashboardResult.status === 'fulfilled' ? dashboardResult.value : null);
+      setRecent(txResult.status === 'fulfilled' ? txResult.value.slice(0, 5) : []);
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -132,8 +127,18 @@ export default function Dashboard() {
     );
   }
 
-  if (error) return <Alert severity="error">{error}</Alert>;
-  if (!data) return null;
+  if (!data) {
+    return (
+      <Card>
+        <CardContent sx={{ py: 8, textAlign: 'center' }}>
+          <AccountBalanceWalletOutlinedIcon sx={{ fontSize: 32, color: 'text.secondary', mb: 1 }} />
+          <Typography variant="body1" color="text.secondary">
+            No data to display yet. Add a transaction to see your dashboard.
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -144,7 +149,7 @@ export default function Dashboard() {
             mt: 0.5,
             fontSize: 12,
             fontFamily: '"Space Mono", monospace',
-            color: '#666666',
+            color: concrete.aggregate,
             textTransform: 'uppercase',
             letterSpacing: 1,
           }}
@@ -159,8 +164,8 @@ export default function Dashboard() {
             title="Total Income"
             value={formatCurrency(data.totalIncome)}
             icon={<TrendingUpOutlinedIcon fontSize="small" />}
-            color="#007A45"
-            bgColor="#D6F0E0"
+            color={moss.main}
+            bgColor={moss.light}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
@@ -168,8 +173,8 @@ export default function Dashboard() {
             title="Total Expenses"
             value={formatCurrency(data.totalExpenses)}
             icon={<TrendingDownOutlinedIcon fontSize="small" />}
-            color="#CC0000"
-            bgColor="#FFE0E0"
+            color={oxide.main}
+            bgColor={oxide.light}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
@@ -177,8 +182,8 @@ export default function Dashboard() {
             title="Balance"
             value={formatCurrency(data.balance)}
             icon={<AccountBalanceWalletOutlinedIcon fontSize="small" />}
-            color={data.balance >= 0 ? '#007A45' : '#CC0000'}
-            bgColor={data.balance >= 0 ? '#D6F0E0' : '#FFE0E0'}
+            color={data.balance >= 0 ? moss.main : oxide.main}
+            bgColor={data.balance >= 0 ? moss.light : oxide.light}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
@@ -186,8 +191,8 @@ export default function Dashboard() {
             title="Transactions"
             value={String(data.transactionCount)}
             icon={<ReceiptLongOutlinedIcon fontSize="small" />}
-            color="#000000"
-            bgColor="#FFD600"
+            color={concrete.void}
+            bgColor={concrete.stone}
           />
         </Grid>
       </Grid>
@@ -279,7 +284,7 @@ export default function Dashboard() {
                           fontFamily: '"Space Mono", monospace',
                           fontWeight: 700,
                           fontSize: 13,
-                          color: tx.type === 'INCOME' ? '#007A45' : '#CC0000',
+                          color: tx.type === 'INCOME' ? moss.main : oxide.main,
                           flexShrink: 0,
                           ml: 2,
                         }}

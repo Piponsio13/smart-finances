@@ -1,33 +1,34 @@
 import { createTheme } from '@mui/material/styles';
+import { concrete, moss, oxide } from './palette';
 
 const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#000000',
-      contrastText: '#FFFFFF',
+      main: concrete.void,
+      contrastText: concrete.paper,
     },
     secondary: {
-      main: '#FFD600',
-      contrastText: '#000000',
+      main: concrete.aggregate,
+      contrastText: concrete.void,
     },
     success: {
-      main: '#007A45',
-      light: '#D6F0E0',
+      main: moss.main,
+      light: moss.light,
     },
     error: {
-      main: '#CC0000',
-      light: '#FFE0E0',
+      main: oxide.main,
+      light: oxide.light,
     },
     background: {
-      default: '#F5F0E8',
-      paper: '#FFFFFF',
+      default: concrete.bg,
+      paper: concrete.paper,
     },
     text: {
-      primary: '#000000',
-      secondary: '#444444',
+      primary: concrete.void,
+      secondary: concrete.aggregate,
     },
-    divider: '#000000',
+    divider: concrete.void,
   },
   typography: {
     fontFamily: '"Space Mono", "Courier New", monospace',
@@ -35,8 +36,8 @@ const theme = createTheme({
     h5: { fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5 },
     h6: { fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 },
     subtitle1: { fontWeight: 700 },
-    body2: { color: '#444444' },
-    caption: { color: '#666666' },
+    body2: { color: concrete.aggregate },
+    caption: { color: concrete.aggregate },
     button: { textTransform: 'uppercase', fontWeight: 700, letterSpacing: 1.5 },
   },
   shape: { borderRadius: 0 },
@@ -44,8 +45,8 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: '4px 4px 0px #000000',
-          border: '2px solid #000000',
+          boxShadow: `6px 6px 0px ${concrete.void}`,
+          border: `2px solid ${concrete.void}`,
           borderRadius: 0,
         },
       },
@@ -64,7 +65,7 @@ const theme = createTheme({
           letterSpacing: 1.5,
           transition: 'box-shadow 0.1s, transform 0.1s',
           '&:hover': {
-            boxShadow: '3px 3px 0px #000000',
+            boxShadow: `4px 4px 0px ${concrete.void}`,
             transform: 'translate(-1px, -1px)',
           },
           '&:active': {
@@ -73,21 +74,21 @@ const theme = createTheme({
           },
         },
         contained: {
-          backgroundColor: '#000000',
-          color: '#FFFFFF',
-          border: '2px solid #000000',
-          '&:hover': { backgroundColor: '#111111' },
-          '&.Mui-disabled': { backgroundColor: '#BBBBBB', color: '#777777', border: '2px solid #BBBBBB' },
+          backgroundColor: concrete.void,
+          color: concrete.paper,
+          border: `2px solid ${concrete.void}`,
+          '&:hover': { backgroundColor: concrete.charcoal },
+          '&.Mui-disabled': { backgroundColor: concrete.stone, color: concrete.aggregate, border: `2px solid ${concrete.stone}` },
         },
         outlined: {
-          border: '2px solid #000000',
-          color: '#000000',
-          '&:hover': { border: '2px solid #000000', backgroundColor: 'rgba(0,0,0,0.06)' },
+          border: `2px solid ${concrete.void}`,
+          color: concrete.void,
+          '&:hover': { border: `2px solid ${concrete.void}`, backgroundColor: 'rgba(26,25,24,0.06)' },
         },
         text: {
-          color: '#000000',
+          color: concrete.void,
           fontWeight: 700,
-          '&:hover': { backgroundColor: 'rgba(0,0,0,0.06)', boxShadow: 'none', transform: 'none' },
+          '&:hover': { backgroundColor: 'rgba(26,25,24,0.06)', boxShadow: 'none', transform: 'none' },
         },
       },
     },
@@ -99,9 +100,10 @@ const theme = createTheme({
         root: {
           borderRadius: 0,
           fontFamily: '"Space Mono", "Courier New", monospace',
-          '& fieldset': { borderColor: '#000000', borderWidth: '2px' },
-          '&:hover fieldset': { borderColor: '#000000 !important', borderWidth: '2px !important' },
-          '&.Mui-focused fieldset': { borderColor: '#000000 !important', borderWidth: '2px !important' },
+          backgroundColor: concrete.paper,
+          '& fieldset': { borderColor: concrete.void, borderWidth: '2px' },
+          '&:hover fieldset': { borderColor: `${concrete.void} !important`, borderWidth: '2px !important' },
+          '&.Mui-focused fieldset': { borderColor: `${concrete.void} !important`, borderWidth: '2px !important' },
         },
       },
     },
@@ -113,8 +115,8 @@ const theme = createTheme({
           fontSize: 11,
           textTransform: 'uppercase',
           letterSpacing: 1,
-          color: '#000000',
-          '&.Mui-focused': { color: '#000000' },
+          color: concrete.void,
+          '&.Mui-focused': { color: concrete.void },
         },
       },
     },
@@ -137,7 +139,7 @@ const theme = createTheme({
           borderRadius: 0,
           fontFamily: '"Space Mono", "Courier New", monospace',
           fontWeight: 700,
-          border: '1.5px solid #000000',
+          border: `1.5px solid ${concrete.void}`,
           fontSize: 10,
           letterSpacing: 0.5,
           textTransform: 'uppercase',
@@ -152,9 +154,9 @@ const theme = createTheme({
           '& .MuiTableCell-root': {
             fontFamily: '"Space Mono", "Courier New", monospace',
             fontWeight: 700,
-            color: '#FFFFFF',
-            backgroundColor: '#000000',
-            borderBottom: '2px solid #000000',
+            color: concrete.paper,
+            backgroundColor: concrete.void,
+            borderBottom: `2px solid ${concrete.void}`,
             textTransform: 'uppercase',
             letterSpacing: 1,
             fontSize: 11,
@@ -166,7 +168,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontFamily: '"Space Mono", "Courier New", monospace',
-          borderColor: '#DDDDDD',
+          borderColor: concrete.stone,
           fontSize: 13,
         },
       },
@@ -174,7 +176,7 @@ const theme = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: {
-          '&:hover': { backgroundColor: 'rgba(0,0,0,0.03) !important' },
+          '&:hover': { backgroundColor: 'rgba(26,25,24,0.05) !important' },
         },
       },
     },
@@ -183,12 +185,12 @@ const theme = createTheme({
         root: {
           borderRadius: 0,
           height: 10,
-          backgroundColor: '#E5E0D8',
-          border: '1px solid #000000',
+          backgroundColor: concrete.stone,
+          border: `1px solid ${concrete.void}`,
         },
         bar: {
           borderRadius: 0,
-          backgroundColor: '#000000',
+          backgroundColor: concrete.void,
         },
       },
     },
@@ -196,8 +198,8 @@ const theme = createTheme({
       styleOverrides: {
         paper: {
           borderRadius: 0,
-          border: '3px solid #000000',
-          boxShadow: '8px 8px 0px #000000',
+          border: `3px solid ${concrete.void}`,
+          boxShadow: `10px 10px 0px ${concrete.void}`,
         },
       },
     },
@@ -208,16 +210,16 @@ const theme = createTheme({
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: 1.5,
-          borderBottom: '2px solid #000000',
-          backgroundColor: '#000000',
-          color: '#FFFFFF',
+          borderBottom: `2px solid ${concrete.void}`,
+          backgroundColor: concrete.void,
+          color: concrete.paper,
         },
       },
     },
     MuiDialogActions: {
       styleOverrides: {
         root: {
-          borderTop: '2px solid #000000',
+          borderTop: `2px solid ${concrete.void}`,
           padding: '16px',
           gap: '8px',
         },
@@ -233,35 +235,35 @@ const theme = createTheme({
           fontSize: 12,
         },
         standardError: {
-          borderColor: '#CC0000',
-          backgroundColor: '#FFE0E0',
-          color: '#CC0000',
+          borderColor: oxide.main,
+          backgroundColor: oxide.light,
+          color: oxide.main,
         },
         standardSuccess: {
-          borderColor: '#007A45',
-          backgroundColor: '#D6F0E0',
-          color: '#007A45',
+          borderColor: moss.main,
+          backgroundColor: moss.light,
+          color: moss.main,
         },
       },
     },
     MuiDivider: {
       styleOverrides: {
-        root: { borderColor: '#000000', borderWidth: 1 },
+        root: { borderColor: concrete.void, borderWidth: 1 },
       },
     },
     MuiSkeleton: {
       styleOverrides: {
-        root: { borderRadius: 0, backgroundColor: 'rgba(0,0,0,0.08)' },
+        root: { borderRadius: 0, backgroundColor: 'rgba(26,25,24,0.08)' },
       },
     },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
           borderRadius: 0,
-          backgroundColor: '#000000',
+          backgroundColor: concrete.void,
           fontFamily: '"Space Mono", "Courier New", monospace',
           fontSize: 11,
-          border: '1px solid #000000',
+          border: `1px solid ${concrete.void}`,
         },
       },
     },
@@ -270,7 +272,7 @@ const theme = createTheme({
         root: {
           borderRadius: 0,
           border: '1px solid transparent',
-          '&:hover': { border: '1px solid #000000', borderRadius: 0 },
+          '&:hover': { border: `1px solid ${concrete.void}`, borderRadius: 0 },
         },
       },
     },

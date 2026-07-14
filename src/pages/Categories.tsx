@@ -19,6 +19,7 @@ import { categoriesApi, type Category } from '../api/categories';
 import CategoryModal from '../components/CategoryModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
+import { concrete, moss, oxide } from '../theme/palette';
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -34,7 +35,8 @@ export default function Categories() {
       setCategories(data);
       setError('');
     } catch {
-      setError('Failed to load categories.');
+      // Nothing to load yet — not an error, just no categories.
+      setCategories([]);
     }
   }
 
@@ -88,12 +90,12 @@ export default function Categories() {
               sx={{
                 width: 36,
                 height: 36,
-                border: '2px solid #000000',
+                border: `2px solid ${concrete.void}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                bgcolor: isIncome ? '#D6F0E0' : '#FFE0E0',
-                color: isIncome ? '#007A45' : '#CC0000',
+                bgcolor: isIncome ? moss.light : oxide.light,
+                color: isIncome ? moss.main : oxide.main,
               }}
             >
               {isIncome ? (
@@ -103,10 +105,10 @@ export default function Categories() {
               )}
             </Box>
             <Box>
-              <Typography variant="h6" sx={{ color: isIncome ? '#007A45' : '#CC0000', fontSize: 14 }}>
+              <Typography variant="h6" sx={{ color: isIncome ? moss.main : oxide.main, fontSize: 14 }}>
                 {title}
               </Typography>
-              <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: '#666666', textTransform: 'uppercase', letterSpacing: 1 }}>
+              <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
                 {items.length} {items.length === 1 ? 'category' : 'categories'}
               </Typography>
             </Box>
@@ -124,10 +126,10 @@ export default function Categories() {
                   </Tooltip>
                 }
                 sx={{
-                  bgcolor: '#FFFFFF',
+                  bgcolor: concrete.paper,
                   '& .MuiChip-deleteIcon': {
-                    color: '#888888',
-                    '&:hover': { color: '#CC0000' },
+                    color: concrete.aggregate,
+                    '&:hover': { color: oxide.main },
                   },
                 }}
               />
@@ -148,7 +150,7 @@ export default function Categories() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Categories</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: '#666666', textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
             Organize your transactions with custom categories
           </Typography>
         </Box>

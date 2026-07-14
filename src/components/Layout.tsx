@@ -13,8 +13,13 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
+import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useAuth } from '../context/AuthContext';
+import { concrete, oxide } from '../theme/palette';
 
 const SIDEBAR_WIDTH = 220;
 
@@ -23,6 +28,10 @@ const NAV_ITEMS = [
   { label: 'Transactions', icon: <ReceiptLongOutlinedIcon fontSize="small" />, path: '/transactions' },
   { label: 'Categories', icon: <CategoryOutlinedIcon fontSize="small" />, path: '/categories' },
   { label: 'Budgets', icon: <AccountBalanceOutlinedIcon fontSize="small" />, path: '/budgets' },
+  { label: 'Analytics', icon: <BarChartOutlinedIcon fontSize="small" />, path: '/analytics' },
+  { label: 'Recurring', icon: <AutorenewOutlinedIcon fontSize="small" />, path: '/recurring' },
+  { label: 'Savings', icon: <SavingsOutlinedIcon fontSize="small" />, path: '/savings' },
+  { label: 'Bills', icon: <NotificationsNoneOutlinedIcon fontSize="small" />, path: '/bills' },
 ] as const;
 
 interface LayoutProps {
@@ -44,19 +53,19 @@ export default function Layout({ children }: LayoutProps) {
           '& .MuiDrawer-paper': {
             width: SIDEBAR_WIDTH,
             boxSizing: 'border-box',
-            borderRight: '3px solid #000000',
-            bgcolor: '#000000',
+            borderRight: `3px solid ${concrete.void}`,
+            bgcolor: concrete.charcoal,
             display: 'flex',
             flexDirection: 'column',
           },
         }}
       >
-        <Box sx={{ px: 2.5, py: 3, borderBottom: '2px solid #333333' }}>
+        <Box sx={{ px: 2.5, py: 3, borderBottom: `2px solid ${concrete.void}` }}>
           <Typography
             variant="h6"
             sx={{
               fontWeight: 700,
-              color: '#FFD600',
+              color: concrete.stone,
               letterSpacing: 2,
               fontSize: 13,
               lineHeight: 1.3,
@@ -80,13 +89,13 @@ export default function Layout({ children }: LayoutProps) {
                   mb: 0,
                   px: 2.5,
                   py: 1.5,
-                  color: isActive ? '#000000' : '#AAAAAA',
-                  bgcolor: isActive ? '#FFD600' : 'transparent',
-                  borderLeft: isActive ? '4px solid #FFD600' : '4px solid transparent',
-                  borderBottom: '1px solid #1A1A1A',
+                  color: isActive ? concrete.void : '#9A9587',
+                  bgcolor: isActive ? concrete.stone : 'transparent',
+                  borderLeft: isActive ? `4px solid ${concrete.stone}` : '4px solid transparent',
+                  borderBottom: `1px solid ${concrete.void}`,
                   '&:hover': {
-                    bgcolor: isActive ? '#FFD600' : '#1A1A1A',
-                    color: isActive ? '#000000' : '#FFFFFF',
+                    bgcolor: isActive ? concrete.stone : '#3A3936',
+                    color: isActive ? concrete.void : '#FFFFFF',
                   },
                   '& .MuiListItemIcon-root': {
                     color: 'inherit',
@@ -109,15 +118,15 @@ export default function Layout({ children }: LayoutProps) {
           })}
         </List>
 
-        <Box sx={{ borderTop: '2px solid #333333' }}>
+        <Box sx={{ borderTop: `2px solid ${concrete.void}` }}>
           <ListItemButton
             onClick={logout}
             sx={{
               borderRadius: 0,
               px: 2.5,
               py: 1.5,
-              color: '#AAAAAA',
-              '&:hover': { color: '#FF4444', bgcolor: '#1A0000' },
+              color: '#9A9587',
+              '&:hover': { color: '#F0EDE5', bgcolor: oxide.main },
               '& .MuiListItemIcon-root': { color: 'inherit', minWidth: 32 },
             }}
           >

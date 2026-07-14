@@ -15,12 +15,14 @@ import {
 } from '@mui/material';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import { budgetsApi, type Budget } from '../api/budgets';
 import { categoriesApi, type Category } from '../api/categories';
 import BudgetModal from '../components/BudgetModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
+import { concrete, oxide, ochre } from '../theme/palette';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -33,9 +35,11 @@ function formatCurrency(value: number): string {
 
 function BudgetCard({
   budget,
+  onEdit,
   onDelete,
 }: {
   budget: Budget;
+  onEdit: () => void;
   onDelete: () => void;
 }) {
   const progress = budget.monthlyLimit > 0
@@ -43,10 +47,10 @@ function BudgetCard({
     : 0;
 
   const progressColor = budget.exceeded
-    ? '#CC0000'
+    ? oxide.main
     : progress > 80
-    ? '#B85C00'
-    : '#000000';
+    ? ochre.main
+    : concrete.void;
 
   return (
     <Card>
@@ -66,9 +70,14 @@ function BudgetCard({
                 icon={<WarningAmberOutlinedIcon />}
                 label="OVER BUDGET"
                 size="small"
-                sx={{ bgcolor: '#FFE0E0', color: '#CC0000', borderColor: '#CC0000' }}
+                sx={{ bgcolor: oxide.light, color: oxide.main, borderColor: oxide.main }}
               />
             )}
+            <Tooltip title="Edit budget">
+              <IconButton size="small" onClick={onEdit} sx={{ color: 'text.secondary' }}>
+                <EditOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Delete budget">
               <IconButton size="small" onClick={onDelete} sx={{ color: 'text.secondary' }}>
                 <DeleteOutlineOutlinedIcon fontSize="small" />
@@ -79,10 +88,10 @@ function BudgetCard({
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
           <Typography variant="body2" color="text.secondary">
-            Spent: <strong style={{ color: '#111827' }}>{formatCurrency(budget.actualSpending)}</strong>
+            Spent: <strong style={{ color: concrete.void }}>{formatCurrency(budget.actualSpending)}</strong>
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Limit: <strong style={{ color: '#111827' }}>{formatCurrency(budget.monthlyLimit)}</strong>
+            Limit: <strong style={{ color: concrete.void }}>{formatCurrency(budget.monthlyLimit)}</strong>
           </Typography>
         </Box>
 
@@ -122,6 +131,7 @@ export default function Budgets() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -131,30 +141,33 @@ export default function Budgets() {
       setBudgets(data);
       setError('');
     } catch {
-      setError('Failed to load budgets.');
+      // Nothing to load yet — not an error, just no budgets.
+      setBudgets([]);
     }
   }
 
   useEffect(() => {
     async function init() {
-      try {
-        const [budgetData, catData] = await Promise.all([
-          budgetsApi.getAll(),
-          categoriesApi.getAll(),
-        ]);
-        setBudgets(budgetData);
-        setCategories(catData);
-      } catch {
-        setError('Failed to load data.');
-      } finally {
-        setLoading(false);
-      }
+      const [budgetResult, catResult] = await Promise.allSettled([
+        budgetsApi.getAll(),
+        categoriesApi.getAll(),
+      ]);
+      // Settled independently — one failing shouldn't wipe out the other.
+      setBudgets(budgetResult.status === 'fulfilled' ? budgetResult.value : []);
+      setCategories(catResult.status === 'fulfilled' ? catResult.value : []);
+      setLoading(false);
     }
     init();
   }, []);
 
   async function handleCreate(data: Parameters<typeof budgetsApi.create>[0]) {
     await budgetsApi.create(data);
+    await fetchBudgets();
+  }
+
+  async function handleUpdate(data: Parameters<typeof budgetsApi.update>[1]) {
+    if (!editingBudget) return;
+    await budgetsApi.update(editingBudget.id, data);
     await fetchBudgets();
   }
 
@@ -179,7 +192,7 @@ export default function Budgets() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Budgets</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: '#666666', textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
             Track your spending limits per category
           </Typography>
         </Box>
@@ -216,17 +229,23 @@ export default function Budgets() {
         <Grid container spacing={2.5}>
           {budgets.map((budget) => (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={budget.id}>
-              <BudgetCard budget={budget} onDelete={() => setDeletingId(budget.id)} />
+              <BudgetCard
+                budget={budget}
+                onEdit={() => setEditingBudget(budget)}
+                onDelete={() => setDeletingId(budget.id)}
+              />
             </Grid>
           ))}
         </Grid>
       )}
 
       <BudgetModal
-        open={modalOpen}
+        open={modalOpen || editingBudget !== null}
         categories={categories}
+        budget={editingBudget}
         onSave={handleCreate}
-        onClose={() => setModalOpen(false)}
+        onUpdate={handleUpdate}
+        onClose={() => { setModalOpen(false); setEditingBudget(null); }}
       />
 
       <ConfirmDialog

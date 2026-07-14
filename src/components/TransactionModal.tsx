@@ -30,6 +30,7 @@ const DEFAULT_FORM: CreateTransactionRequest = {
   type: 'EXPENSE',
   categoryId: 0,
   date: new Date().toISOString().slice(0, 16),
+  currency: 'USD',
 };
 
 export default function TransactionModal({
@@ -57,6 +58,7 @@ export default function TransactionModal({
         type: transaction.type,
         categoryId: matchedCat?.id ?? 0,
         date: transaction.date.slice(0, 16),
+        currency: transaction.currency ?? 'USD',
       });
     } else {
       setForm(DEFAULT_FORM);
@@ -164,15 +166,24 @@ export default function TransactionModal({
             ))}
           </TextField>
 
-          <TextField
-            label="Date & Time"
-            type="datetime-local"
-            value={form.date}
-            onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-            required
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-          />
+          <Box sx={{ display: 'flex', gap: 1.5 }}>
+            <TextField
+              label="Date & Time"
+              type="datetime-local"
+              value={form.date}
+              onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
+              required
+              fullWidth
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
+            <TextField
+              label="Currency"
+              value={form.currency ?? 'USD'}
+              onChange={(e) => setForm((f) => ({ ...f, currency: e.target.value.toUpperCase().slice(0, 3) }))}
+              sx={{ width: 100 }}
+              inputProps={{ maxLength: 3 }}
+            />
+          </Box>
         </DialogContent>
 
         <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>

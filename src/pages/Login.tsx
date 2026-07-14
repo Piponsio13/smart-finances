@@ -15,6 +15,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import { authApi } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
 import type { ApiError } from '../api/client';
+import { concrete } from '../theme/palette';
 
 export default function Login() {
   const { login } = useAuth();
@@ -41,7 +42,7 @@ export default function Login() {
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: '#F5F0E8',
+        bgcolor: '#E4E0D6',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -58,21 +59,21 @@ export default function Login() {
               letterSpacing: 3,
               textTransform: 'uppercase',
               lineHeight: 1.1,
-              color: '#000000',
+              color: concrete.void,
             }}
           >
             SMART
             <br />
             FINANCES
           </Typography>
-          <Box sx={{ width: 60, height: 4, bgcolor: '#FFD600', mt: 1.5, border: '1px solid #000' }} />
+          <Box sx={{ width: 60, height: 4, bgcolor: concrete.stone, mt: 1.5, border: `1px solid ${concrete.void}` }} />
         </Box>
 
         <Box
           sx={{
-            border: '3px solid #000000',
-            boxShadow: '6px 6px 0px #000000',
-            bgcolor: '#FFFFFF',
+            border: `3px solid ${concrete.void}`,
+            boxShadow: `8px 8px 0px ${concrete.void}`,
+            bgcolor: concrete.paper,
             p: 4,
           }}
         >
@@ -83,7 +84,7 @@ export default function Login() {
             SIGN IN
           </Typography>
           <Typography
-            sx={{ mb: 3, fontSize: 12, color: '#666666', fontFamily: '"Space Mono", monospace' }}
+            sx={{ mb: 3, fontSize: 12, color: concrete.aggregate, fontFamily: '"Space Mono", monospace' }}
           >
             Enter your credentials to continue
           </Typography>
@@ -153,24 +154,24 @@ export default function Login() {
             sx={{
               mt: 3,
               pt: 2,
-              borderTop: '2px solid #000000',
+              borderTop: `2px solid ${concrete.void}`,
               display: 'flex',
               justifyContent: 'center',
             }}
           >
             <Typography
-              sx={{ fontSize: 11, fontFamily: '"Space Mono", monospace', color: '#666666' }}
+              sx={{ fontSize: 11, fontFamily: '"Space Mono", monospace', color: concrete.aggregate }}
             >
               NO ACCOUNT?{' '}
               <Link
                 component={RouterLink}
                 to="/register"
                 sx={{
-                  color: '#000000',
+                  color: concrete.void,
                   fontWeight: 700,
-                  textDecorationColor: '#FFD600',
+                  textDecorationColor: concrete.stone,
                   textDecorationThickness: 2,
-                  '&:hover': { color: '#000000', bgcolor: '#FFD600' },
+                  '&:hover': { color: concrete.void, bgcolor: concrete.stone },
                 }}
               >
                 SIGN UP

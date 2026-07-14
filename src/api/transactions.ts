@@ -7,6 +7,7 @@ export interface Transaction {
   type: 'INCOME' | 'EXPENSE';
   categoryName: string;
   date: string;
+  currency?: string;
 }
 
 export interface TransactionFilters {
@@ -32,6 +33,7 @@ export interface CreateTransactionRequest {
   type: 'INCOME' | 'EXPENSE';
   categoryId: number;
   date: string;
+  currency?: string;
 }
 
 export const transactionsApi = {
@@ -71,6 +73,11 @@ export const transactionsApi = {
 
   exportCsv: (filters?: TransactionFilters) =>
     fetch(`${BASE_URL}/api/transactions/export${buildQueryString(filters ?? {})}`, {
+      headers: getHeaders(),
+    }),
+
+  exportPdf: (filters?: TransactionFilters) =>
+    fetch(`${BASE_URL}/api/transactions/export/pdf${buildQueryString(filters ?? {})}`, {
       headers: getHeaders(),
     }),
 };
