@@ -1,4 +1,5 @@
-export const BASE_URL = '';
+export const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
 
 export interface ApiError extends Error {
   status: number;
@@ -7,7 +8,9 @@ export interface ApiError extends Error {
 
 export function getHeaders(): Record<string, string> {
   const token = localStorage.getItem('sf_token');
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
   if (token) headers['Authorization'] = `Bearer ${token}`;
   return headers;
 }
