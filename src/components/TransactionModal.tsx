@@ -12,7 +12,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from '@mui/material';
-import type { Transaction, CreateTransactionRequest } from '../api/transactions';
+import { transactionsApi, type Transaction, type CreateTransactionRequest } from '../api/transactions';
 import type { Category } from '../api/categories';
 import type { ApiError } from '../api/client';
 
@@ -43,6 +43,9 @@ export default function TransactionModal({
   const [form, setForm] = useState<CreateTransactionRequest>(DEFAULT_FORM);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // Once the user picks a category by hand we stop auto-filling it.
+  const [categoryTouched, setCategoryTouched] = useState(false);
+  const [autoFilled, setAutoFilled] = useState(false);
 
   const isEditing = !!transaction;
   const filteredCategories = categories.filter((c) => c.type === form.type);
@@ -60,14 +63,42 @@ export default function TransactionModal({
         date: transaction.date.slice(0, 16),
         currency: transaction.currency ?? 'USD',
       });
+      setCategoryTouched(true);
     } else {
       setForm(DEFAULT_FORM);
+      setCategoryTouched(false);
     }
+    setAutoFilled(false);
     setError('');
   }, [open, transaction, categories]);
 
+  // Suggest a category from the description as the user types (unless they picked one).
+  useEffect(() => {
+    if (!open || categoryTouched) return;
+    const description = form.description.trim();
+    if (description.length < 3) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        const suggestion = await transactionsApi.suggestCategory(description, form.type);
+        if (categoryTouched || suggestion.categoryId == null) return;
+        const match = categories.find((c) => c.id === suggestion.categoryId && c.type === form.type);
+        if (match) {
+          setForm((f) => ({ ...f, categoryId: match.id }));
+          setAutoFilled(true);
+        }
+      } catch {
+        // Suggestion is best-effort; leave the field for the user on failure.
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [open, categoryTouched, form.description, form.type, categories]);
+
   function handleTypeChange(newType: 'INCOME' | 'EXPENSE') {
     setForm((f) => ({ ...f, type: newType, categoryId: 0 }));
+    setCategoryTouched(false);
+    setAutoFilled(false);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -155,9 +186,14 @@ export default function TransactionModal({
             select
             label="Category"
             value={form.categoryId || ''}
-            onChange={(e) => setForm((f) => ({ ...f, categoryId: Number(e.target.value) }))}
+            onChange={(e) => {
+              setCategoryTouched(true);
+              setAutoFilled(false);
+              setForm((f) => ({ ...f, categoryId: Number(e.target.value) }));
+            }}
             required
             fullWidth
+            helperText={autoFilled ? 'Auto-filled from description — change if needed' : ' '}
           >
             {filteredCategories.map((c) => (
               <MenuItem key={c.id} value={c.id}>
