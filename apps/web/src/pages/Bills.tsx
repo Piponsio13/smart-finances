@@ -20,7 +20,7 @@ import { categoriesApi, type Category } from '../api/categories';
 import BillModal from '../components/BillModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
-import { concrete, moss, oxide, ochre } from '../theme/palette';
+import { concrete, oxide, ochre } from '../theme/palette';
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);

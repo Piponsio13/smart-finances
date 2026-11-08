@@ -1,0 +1,53 @@
+[tools]
+node = "22.22.0"
+java = "temurin-21.0.9+10"
+
+[tasks."web:install"]
+dir = "apps/web"
+run = "npm ci"
+
+[tasks."mobile:install"]
+dir = "apps/mobile"
+run = "npm ci"
+
+[tasks.setup]
+description = "Install dependencies for web and mobile"
+depends = ["web:install", "mobile:install"]
+
+[tasks."db:up"]
+dir = "apps/api"
+run = "docker compose up -d --wait postgres"
+
+[tasks."db:stop"]
+dir = "apps/api"
+run = "docker compose stop postgres"
+
+[tasks."api:dev"]
+dir = "apps/api"
+env = { SPRING_PROFILES_ACTIVE = "dev" }
+run = "./mvnw spring-boot:run"
+
+[tasks."web:dev"]
+dir = "apps/web"
+run = "npm run dev"
+
+[tasks."mobile:dev"]
+dir = "apps/mobile"
+run = "npm start"
+
+[tasks."api:test"]
+dir = "apps/api"
+env = { SPRING_PROFILES_ACTIVE = "dev" }
+run = "./mvnw -B test"
+
+[tasks."web:build"]
+dir = "apps/web"
+run = "npm run build"
+
+[tasks."mobile:typecheck"]
+dir = "apps/mobile"
+run = "npm exec --no -- tsc --noEmit"
+
+[tasks.check]
+description = "Run API tests, build web, and type-check mobile"
+depends = ["api:test", "web:build", "mobile:typecheck"]

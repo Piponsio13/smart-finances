@@ -23,7 +23,7 @@ import SavingsModal from '../components/SavingsModal';
 import ContributionModal from '../components/ContributionModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
-import { concrete, moss, oxide, ochre } from '../theme/palette';
+import { concrete, moss, ochre } from '../theme/palette';
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);

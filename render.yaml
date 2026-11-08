@@ -2,6 +2,7 @@ services:
   - type: web
     name: smartfinances-api
     runtime: docker
+    rootDir: apps/api
     dockerfilePath: ./Dockerfile
     plan: free
     healthCheckPath: /actuator/health

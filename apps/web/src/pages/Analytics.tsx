@@ -12,7 +12,7 @@ import {
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
 import TrendingDownOutlinedIcon from '@mui/icons-material/TrendingDownOutlined';
 import { analyticsApi, type MonthTrend, type CategoryTrend, type ForecastData } from '../api/analytics';
-import { concrete, moss, oxide, ochre } from '../theme/palette';
+import { concrete, moss, oxide } from '../theme/palette';
 
 const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
