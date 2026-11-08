@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
 import { concrete } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { monoBold } from '../theme/typography';
 
 interface StatCardProps {
   title: string;
@@ -28,24 +28,22 @@ export default function StatCard({ title, value, icon, color, bgColor }: StatCar
 
 const styles = StyleSheet.create({
   card: { flex: 1, minWidth: '46%' },
-  row: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
+  row: { gap: 8, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
   text: { flex: 1, gap: 6 },
   title: {
     fontFamily: monoBold,
-    fontSize: 9,
-    letterSpacing: 1.2,
+    fontSize: 11,
+    letterSpacing: 0.5,
     color: concrete.aggregate,
   },
   value: {
-    fontFamily: mono,
-    fontWeight: '700',
+    fontFamily: monoBold,
     fontSize: 18,
   },
   iconBox: {
     width: 34,
     height: 34,
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
