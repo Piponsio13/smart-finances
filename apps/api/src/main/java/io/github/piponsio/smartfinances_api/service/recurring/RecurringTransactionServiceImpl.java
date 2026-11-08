@@ -101,17 +101,16 @@ public class RecurringTransactionServiceImpl implements RecurringTransactionServ
         LocalDate today = LocalDate.now();
         List<RecurringTransaction> due = recurringRepo.findByActiveTrueAndNextDueDateLessThanEqual(today);
         for (RecurringTransaction rt : due) {
-            Transaction t = new Transaction();
-            t.setAmount(rt.getAmount());
-            t.setDescription(rt.getDescription());
-            t.setType(rt.getType());
-            t.setCategory(rt.getCategory());
-            t.setUser(rt.getUser());
-            t.setDate(rt.getNextDueDate().atTime(12, 0));
-            transactionRepository.save(t);
-
-            LocalDate next = advance(rt.getNextDueDate(), rt.getFrequency());
+            LocalDate next = rt.getNextDueDate();
             while (!next.isAfter(today)) {
+                Transaction t = new Transaction();
+                t.setAmount(rt.getAmount());
+                t.setDescription(rt.getDescription());
+                t.setType(rt.getType());
+                t.setCategory(rt.getCategory());
+                t.setUser(rt.getUser());
+                t.setDate(next.atTime(12, 0));
+                transactionRepository.save(t);
                 next = advance(next, rt.getFrequency());
             }
             rt.setNextDueDate(next);
