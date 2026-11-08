@@ -5,7 +5,7 @@ services:
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     plan: free
-    healthCheckPath: /actuator/health
+    healthCheckPath: /api/health
     envVars:
       - key: SPRING_DATASOURCE_URL
         sync: false

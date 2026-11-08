@@ -34,3 +34,19 @@ Run `mise run db:stop` to stop local PostgreSQL and retain its data.
 Run `mise run web:build` and `mise run mobile:typecheck` independently. The API test task expects an isolated PostgreSQL test database and uses the connection and JWT settings from your shell. Export `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, and a test-only `JWT_SECRET` before running `mise run api:test` or the combined `mise run check`. GitHub Actions provisions a test database for the API.
 
 The Render blueprint uses `apps/api` as its service root. Keep deployment secrets in Render.
+
+## Run the whole stack in Docker
+
+Start Docker Desktop and run `mise run stack:up` from the repository root.
+Stop any host API, Vite, or Expo processes first so ports 8080, 5173, and 8081
+are available. Open the UI at http://localhost:5173. Docker Desktop groups
+`ui`, `api`, `mobile`, and `postgres` under `smart-finances`.
+
+The mobile container runs Expo Metro. Install and launch the development build
+on a simulator or phone. For a phone, set `SMART_FINANCES_HOST` to your Mac's LAN
+IP when starting the stack. Re-run `mise run stack:up` to rebuild images after
+source changes.
+
+The Docker stack starts with a separate PostgreSQL volume from the host
+development workflow above. Run `mise run stack:down` to stop the stack and
+keep its data.
