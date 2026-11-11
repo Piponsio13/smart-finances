@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
+  Alert,
   Box,
+  Button,
   Card,
   CardContent,
   Typography,
@@ -42,10 +45,10 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
   return (
-    <Card>
+    <Card sx={{ height: '100%' }}>
       <CardContent sx={{ p: 2.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography
               sx={{
                 mb: 1,
@@ -63,7 +66,8 @@ function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
               sx={{
                 fontWeight: 700,
                 color,
-                fontSize: 22,
+                fontSize: { xs: 20, sm: 22 },
+                overflowWrap: 'anywhere',
                 fontFamily: '"Space Mono", monospace',
                 letterSpacing: -0.5,
               }}
@@ -76,7 +80,7 @@ function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
               width: 36,
               height: 36,
               bgcolor: bgColor,
-              border: `2px solid ${concrete.void}`,
+              borderRadius: 2,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -97,19 +101,32 @@ export default function Dashboard() {
   const [recent, setRecent] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [recentFailed, setRecentFailed] = useState(false);
+  const [request, setRequest] = useState(0);
+
   useEffect(() => {
+    let cancelled = false;
     async function fetchData() {
       const [dashboardResult, txResult] = await Promise.allSettled([
         dashboardApi.get(),
         transactionsApi.getAll(),
       ]);
-      // Settled independently — one failing shouldn't wipe out the other.
+      if (cancelled) return;
       setData(dashboardResult.status === 'fulfilled' ? dashboardResult.value : null);
-      setRecent(txResult.status === 'fulfilled' ? txResult.value.slice(0, 5) : []);
+      setRecent(txResult.status === 'fulfilled'
+        ? [...txResult.value].sort((a, b) => Date.parse(b.date) - Date.parse(a.date) || b.id - a.id).slice(0, 5)
+        : []);
+      setRecentFailed(txResult.status === 'rejected');
       setLoading(false);
     }
-    fetchData();
-  }, []);
+    void fetchData();
+    return () => { cancelled = true; };
+  }, [request]);
+
+  function retry() {
+    setLoading(true);
+    setRequest((previous) => previous + 1);
+  }
 
   if (loading) {
     return (
@@ -129,21 +146,19 @@ export default function Dashboard() {
 
   if (!data) {
     return (
-      <Card>
-        <CardContent sx={{ py: 8, textAlign: 'center' }}>
-          <AccountBalanceWalletOutlinedIcon sx={{ fontSize: 32, color: 'text.secondary', mb: 1 }} />
-          <Typography variant="body1" color="text.secondary">
-            No data to display yet. Add a transaction to see your dashboard.
-          </Typography>
-        </CardContent>
-      </Card>
+      <Box>
+        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>Dashboard</Typography>
+        <Alert severity="error" action={<Button onClick={retry}>Retry</Button>}>
+          We couldn’t load your dashboard. Try again in a moment.
+        </Alert>
+      </Box>
     );
   }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Box>
-        <Typography variant="h4" sx={{ fontSize: 24 }}>Dashboard</Typography>
+        <Typography variant="h4" component="h1">Dashboard</Typography>
         <Typography
           sx={{
             mt: 0.5,
@@ -235,6 +250,7 @@ export default function Dashboard() {
                       </Box>
                       <LinearProgress
                         variant="determinate"
+                        aria-label={`${cat.categoryName} share of spending`}
                         value={Math.min(cat.percentage, 100)}
                       />
                     </Box>
@@ -248,11 +264,16 @@ export default function Dashboard() {
         <Grid size={{ xs: 12, md: 6 }}>
           <Card sx={{ height: '100%' }}>
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Recent Transactions
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                <Typography variant="h6" component="h2">Recent transactions</Typography>
+                <Button component={Link} to="/transactions" size="small">View all</Button>
+              </Box>
 
-              {recent.length === 0 ? (
+              {recentFailed ? (
+                <Alert severity="warning" action={<Button onClick={retry}>Retry</Button>}>
+                  Couldn’t load transactions.
+                </Alert>
+              ) : recent.length === 0 ? (
                 <Typography variant="body2" color="text.secondary">
                   No transactions yet.
                 </Typography>
@@ -271,8 +292,8 @@ export default function Dashboard() {
                         '&:last-child': { border: 'none' },
                       }}
                     >
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <Box sx={{ minWidth: 0, overflowWrap: 'anywhere' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
                           {tx.description}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">

@@ -28,13 +28,13 @@ const theme = createTheme({
       primary: concrete.void,
       secondary: concrete.aggregate,
     },
-    divider: concrete.void,
+    divider: concrete.stone,
   },
   typography: {
-    fontFamily: '"Space Mono", "Courier New", monospace',
-    h4: { fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2 },
-    h5: { fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5 },
-    h6: { fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 },
+    fontFamily: 'system-ui, sans-serif',
+    h4: { fontWeight: 750, letterSpacing: -0.6 },
+    h5: { fontWeight: 700, letterSpacing: -0.4 },
+    h6: { fontWeight: 700, letterSpacing: -0.2 },
     subtitle1: { fontWeight: 700 },
     body2: { color: concrete.aggregate },
     caption: { color: concrete.aggregate },
@@ -45,9 +45,9 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: `6px 6px 0px ${concrete.void}`,
-          border: `2px solid ${concrete.void}`,
-          borderRadius: 0,
+          boxShadow: '0 2px 8px rgba(26,25,24,0.07)',
+          border: `1px solid ${concrete.stone}`,
+          borderRadius: 12,
         },
       },
     },

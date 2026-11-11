@@ -1,9 +1,9 @@
 // Raw-concrete brutalist palette — monochrome, no branded accent color.
 export const concrete = {
-  paper: '#F0EDE5', // lightest poured concrete, card/dialog surfaces
-  bg: '#E4E0D6', // default page background, raw concrete slab
+  paper: '#FCFAF4', // lightest poured concrete, card/dialog surfaces
+  bg: '#F2EFE7', // default page background, raw concrete slab
   stone: '#C7C2B4', // mid-tone aggregate, borders on light hover states
-  aggregate: '#8C8776', // muted stone, secondary text / neutral highlight
+  aggregate: '#635F53', // muted stone, secondary text / neutral highlight
   void: '#1A1918', // near-black, primary text, heavy borders, shadows
   charcoal: '#2B2A27', // sidebar / dark surfaces, slightly lighter than void
 };

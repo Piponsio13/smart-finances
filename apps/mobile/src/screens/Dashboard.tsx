@@ -1,13 +1,15 @@
 import { useCallback, useState } from 'react';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from '@react-navigation/native';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Screen from '../components/Screen';
 import ScreenHeader from '../components/ScreenHeader';
 import Card from '../components/Card';
 import StatCard from '../components/StatCard';
 import ProgressBar from '../components/ProgressBar';
-import EmptyState from '../components/EmptyState';
+import Button from '../components/Button';
+import type { AppTabsParamList } from '../navigation/AppTabs';
 import { concrete, moss, oxide } from '../theme/palette';
 import { mono, monoBold } from '../theme/typography';
 import { dashboardApi, type DashboardData } from '../api/dashboard';
@@ -26,9 +28,10 @@ function formatDate(isoString: string): string {
   return new Date(isoString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-export default function Dashboard() {
+export default function Dashboard({ navigation }: BottomTabScreenProps<AppTabsParamList, 'Dashboard'>) {
   const [data, setData] = useState<DashboardData | null>(null);
   const [recent, setRecent] = useState<Transaction[]>([]);
+  const [recentFailed, setRecentFailed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -39,7 +42,10 @@ export default function Dashboard() {
       transactionsApi.getAll(),
     ]);
     setData(dashboardResult.status === 'fulfilled' ? dashboardResult.value : null);
-    setRecent(txResult.status === 'fulfilled' ? txResult.value.slice(0, 5) : []);
+    setRecent(txResult.status === 'fulfilled'
+      ? [...txResult.value].sort((a, b) => Date.parse(b.date) - Date.parse(a.date) || b.id - a.id).slice(0, 5)
+      : []);
+    setRecentFailed(txResult.status === 'rejected');
     setLoading(false);
     setRefreshing(false);
   }, []);
@@ -54,7 +60,7 @@ export default function Dashboard() {
     return (
       <Screen>
         <ScreenHeader title="Dashboard" />
-        <EmptyState message="Loading…" />
+        <ActivityIndicator accessibilityLabel="Loading dashboard" color={concrete.void} />
       </Screen>
     );
   }
@@ -63,7 +69,10 @@ export default function Dashboard() {
     return (
       <Screen refreshing={refreshing} onRefresh={() => load(true)}>
         <ScreenHeader title="Dashboard" />
-        <EmptyState message="No data to display yet. Add a transaction to see your dashboard." />
+        <Card style={styles.error}>
+          <Text accessibilityRole="alert" style={styles.muted}>We couldn’t load your dashboard.</Text>
+          <Button label="Retry" variant="outline" loading={refreshing} onPress={() => void load(true)} />
+        </Card>
       </Screen>
     );
   }
@@ -126,8 +135,18 @@ export default function Dashboard() {
       </Card>
 
       <Card>
-        <Text style={styles.cardTitle}>Recent Transactions</Text>
-        {recent.length === 0 ? (
+        <View style={styles.recentHeader}>
+          <Text accessibilityRole="header" style={styles.sectionTitle}>Recent transactions</Text>
+          <Pressable accessibilityRole="button" onPress={() => navigation.navigate('Transactions')} style={styles.viewAll}>
+            <Text style={styles.viewAllText}>View all</Text>
+          </Pressable>
+        </View>
+        {recentFailed ? (
+          <View style={styles.error}>
+            <Text accessibilityRole="alert" style={styles.muted}>Couldn’t load transactions.</Text>
+            <Button label="Retry" variant="outline" loading={refreshing} onPress={() => void load(true)} />
+          </View>
+        ) : recent.length === 0 ? (
           <Text style={styles.muted}>No transactions yet.</Text>
         ) : (
           <View style={styles.txList}>
@@ -154,7 +173,12 @@ export default function Dashboard() {
 
 const styles = StyleSheet.create({
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  cardTitle: { fontFamily: monoBold, fontSize: 14, color: concrete.void, marginBottom: 14 },
+  cardTitle: { fontSize: 16, fontWeight: '700', color: concrete.void, marginBottom: 14 },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: concrete.void, flexShrink: 1 },
+  recentHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 },
+  viewAll: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 4 },
+  viewAllText: { fontWeight: '600', color: concrete.void, textDecorationLine: 'underline' },
+  error: { gap: 12 },
   muted: { fontFamily: mono, fontSize: 12, color: concrete.aggregate },
   categoryList: { gap: 14 },
   categoryRow: { gap: 6 },
@@ -172,6 +196,6 @@ const styles = StyleSheet.create({
     borderBottomColor: concrete.stone,
   },
   txInfo: { flex: 1, gap: 3 },
-  txDescription: { fontFamily: mono, fontSize: 13, color: concrete.void },
+  txDescription: { fontWeight: '600', fontSize: 14, color: concrete.void },
   txAmount: { fontFamily: monoBold, fontSize: 13, marginLeft: 12 },
 });
