@@ -16,6 +16,9 @@ import { transactionsApi, type Transaction, type CreateTransactionRequest } from
 import type { Category } from '../api/categories';
 import type { ApiError } from '../api/client';
 
+const CURRENCY_CODES = Intl.supportedValuesOf('currency');
+const CURRENCY_NAMES = new Intl.DisplayNames(['en'], { type: 'currency' });
+
 interface TransactionModalProps {
   open: boolean;
   transaction?: Transaction | null;
@@ -202,7 +205,7 @@ export default function TransactionModal({
             ))}
           </TextField>
 
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1.5 }}>
             <TextField
               label="Date & Time"
               type="datetime-local"
@@ -213,12 +216,28 @@ export default function TransactionModal({
               slotProps={{ inputLabel: { shrink: true } }}
             />
             <TextField
+              select
               label="Currency"
               value={form.currency ?? 'USD'}
-              onChange={(e) => setForm((f) => ({ ...f, currency: e.target.value.toUpperCase().slice(0, 3) }))}
-              sx={{ width: 100 }}
-              inputProps={{ maxLength: 3 }}
-            />
+              onChange={(e) => setForm((f) => ({ ...f, currency: e.target.value }))}
+              required
+              sx={{ width: { xs: '100%', sm: 160 }, flexShrink: 0 }}
+              slotProps={{
+                select: {
+                  renderValue: (value) => String(value),
+                  MenuProps: { slotProps: { paper: { sx: { maxHeight: 320 } } } },
+                },
+              }}
+            >
+              {form.currency && !CURRENCY_CODES.includes(form.currency) && (
+                <MenuItem value={form.currency}>{form.currency}</MenuItem>
+              )}
+              {CURRENCY_CODES.map((code) => (
+                <MenuItem key={code} value={code}>
+                  {code} — {CURRENCY_NAMES.of(code)}
+                </MenuItem>
+              ))}
+            </TextField>
           </Box>
         </DialogContent>
 
