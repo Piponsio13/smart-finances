@@ -16,7 +16,7 @@ import { transactionsApi, type Transaction, type CreateTransactionRequest } from
 import type { Category } from '../api/categories';
 import type { ApiError } from '../api/client';
 
-const CURRENCY_CODES = Intl.supportedValuesOf('currency');
+const CURRENCY_CODES = ['USD', 'EUR', 'GBP', 'JPY', 'MXN'];
 const CURRENCY_NAMES = new Intl.DisplayNames(['en'], { type: 'currency' });
 
 interface TransactionModalProps {
@@ -230,7 +230,7 @@ export default function TransactionModal({
               }}
             >
               {form.currency && !CURRENCY_CODES.includes(form.currency) && (
-                <MenuItem value={form.currency}>{form.currency}</MenuItem>
+                <MenuItem value={form.currency} disabled>{form.currency} (saved currency)</MenuItem>
               )}
               {CURRENCY_CODES.map((code) => (
                 <MenuItem key={code} value={code}>
