@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.piponsio.smartfinances_api.dto.request.LoginRequestDto;
 import io.github.piponsio.smartfinances_api.dto.response.LoginReponseDto;
+import io.github.piponsio.smartfinances_api.dto.response.CurrentUserResponseDto;
+import io.github.piponsio.smartfinances_api.entity.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import io.github.piponsio.smartfinances_api.service.auth.LoginService;
 import io.github.piponsio.smartfinances_api.utils.CustomResponse;
 import jakarta.validation.Valid;
@@ -21,6 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class LoginController {
     private final LoginService loginService;
+
+    @GetMapping("/me")
+    public CustomResponse<CurrentUserResponseDto> currentUser(@AuthenticationPrincipal User user) {
+        return CustomResponse.<CurrentUserResponseDto>builder()
+            .data(new CurrentUserResponseDto(user.getName(), user.getEmail()))
+            .message("Current user").statusCode(HttpStatus.OK.value()).build();
+    }
 
     @PostMapping("/login")
     public ResponseEntity<CustomResponse<LoginReponseDto>> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {

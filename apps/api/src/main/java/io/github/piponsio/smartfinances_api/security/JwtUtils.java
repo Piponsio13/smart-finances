@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 import java.util.Date;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import java.util.Map;
@@ -26,7 +27,7 @@ public class JwtUtils {
     private Long jwtExpiration;
 
     private SecretKey getSigningKey(){
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(User user){
@@ -66,7 +67,8 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token, User user){
-        final String username = extractUsername(token);
-        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        Claims claims = extractClaims(token);
+        return user.getUsername().equals(claims.getSubject())
+                && claims.getExpiration() != null && claims.getExpiration().after(new Date());
     }
 }

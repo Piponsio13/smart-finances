@@ -1,4 +1,4 @@
-import { BASE_URL, getHeaders, handleResponse, buildQueryString } from './client';
+import { BASE_URL, apiFetch, getHeaders, handleResponse, buildQueryString } from './client';
 
 export interface MonthTrend {
   month: number;
@@ -40,17 +40,17 @@ export interface ForecastData {
 
 export const analyticsApi = {
   trends: (months?: number) =>
-    fetch(`${BASE_URL}/api/analytics/trends${buildQueryString({ months })}`, {
+    apiFetch(`${BASE_URL}/api/analytics/trends${buildQueryString({ months })}`, {
       headers: getHeaders(),
     }).then((res) => handleResponse<MonthTrend[]>(res)),
 
   categoryTrends: (months?: number) =>
-    fetch(`${BASE_URL}/api/analytics/category-trends${buildQueryString({ months })}`, {
+    apiFetch(`${BASE_URL}/api/analytics/category-trends${buildQueryString({ months })}`, {
       headers: getHeaders(),
     }).then((res) => handleResponse<CategoryTrend[]>(res)),
 
   forecast: (months?: number) =>
-    fetch(`${BASE_URL}/api/analytics/forecast${buildQueryString({ months })}`, {
+    apiFetch(`${BASE_URL}/api/analytics/forecast${buildQueryString({ months })}`, {
       headers: getHeaders(),
     }).then((res) => handleResponse<ForecastData>(res)),
 };

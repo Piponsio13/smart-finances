@@ -1,4 +1,4 @@
-import { BASE_URL, getHeaders, handleResponse } from './client';
+import { BASE_URL, apiFetch, getHeaders, handleResponse } from './client';
 
 export interface SpendingByCategory {
   categoryName: string;
@@ -18,6 +18,6 @@ export interface DashboardData {
 
 export const dashboardApi = {
   get: () =>
-    fetch(`${BASE_URL}/api/dashboard`, { headers: getHeaders() })
+    apiFetch(`${BASE_URL}/api/dashboard`, { headers: getHeaders() })
       .then((res) => handleResponse<DashboardData>(res)),
 };

@@ -9,7 +9,7 @@ import {
   Alert,
 } from '@mui/material';
 import { authApi } from '../api/auth';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/authState';
 import type { ApiError } from '../api/client';
 import { concrete } from '../theme/palette';
 
@@ -18,22 +18,29 @@ export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [accountCreated, setAccountCreated] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (loading || accountCreated) return;
     if (form.password !== form.confirm) {
       setError('Passwords do not match.');
       return;
     }
     setError('');
     setLoading(true);
+    let created = false;
     try {
       await authApi.register({ name: form.name, email: form.email, password: form.password });
+      created = true;
+      setAccountCreated(true);
       const { token } = await authApi.login({ email: form.email, password: form.password });
       login(token);
     } catch (err) {
       const apiErr = err as ApiError;
-      if (apiErr.fields) {
+      if (created) {
+        setError('Your account was created. Please use Sign In to continue.');
+      } else if (apiErr.fields) {
         setError(Object.values(apiErr.fields).join('. '));
       } else {
         setError(apiErr.message ?? 'Registration failed');
@@ -133,6 +140,7 @@ export default function Register() {
               fullWidth
               autoComplete="new-password"
               helperText="Minimum 8 characters"
+              slotProps={{ htmlInput: { minLength: 8 } }}
             />
 
             <TextField
@@ -149,7 +157,7 @@ export default function Register() {
               type="submit"
               variant="contained"
               size="large"
-              disabled={loading}
+              disabled={loading || accountCreated}
               fullWidth
               sx={{ mt: 0.5, py: 1.5, fontSize: 13 }}
             >

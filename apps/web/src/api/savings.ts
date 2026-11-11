@@ -1,4 +1,4 @@
-import { BASE_URL, getHeaders, handleResponse } from './client';
+import { BASE_URL, apiFetch, getHeaders, handleResponse } from './client';
 
 export interface SavingsGoal {
   id: number;
@@ -39,39 +39,39 @@ export interface AddContributionRequest {
 
 export const savingsApi = {
   getAll: () =>
-    fetch(`${BASE_URL}/api/savings`, { headers: getHeaders() })
+    apiFetch(`${BASE_URL}/api/savings`, { headers: getHeaders() })
       .then((res) => handleResponse<SavingsGoal[]>(res)),
 
   getById: (id: number) =>
-    fetch(`${BASE_URL}/api/savings/${id}`, { headers: getHeaders() })
+    apiFetch(`${BASE_URL}/api/savings/${id}`, { headers: getHeaders() })
       .then((res) => handleResponse<SavingsGoal>(res)),
 
   create: (data: CreateSavingsGoalRequest) =>
-    fetch(`${BASE_URL}/api/savings`, {
+    apiFetch(`${BASE_URL}/api/savings`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<SavingsGoal>(res)),
 
   update: (id: number, data: UpdateSavingsGoalRequest) =>
-    fetch(`${BASE_URL}/api/savings/${id}`, {
+    apiFetch(`${BASE_URL}/api/savings/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<SavingsGoal>(res)),
 
   delete: (id: number) =>
-    fetch(`${BASE_URL}/api/savings/${id}`, {
+    apiFetch(`${BASE_URL}/api/savings/${id}`, {
       method: 'DELETE',
       headers: getHeaders(),
     }).then((res) => handleResponse<null>(res)),
 
   getContributions: (id: number) =>
-    fetch(`${BASE_URL}/api/savings/${id}/contributions`, { headers: getHeaders() })
+    apiFetch(`${BASE_URL}/api/savings/${id}/contributions`, { headers: getHeaders() })
       .then((res) => handleResponse<Contribution[]>(res)),
 
   addContribution: (id: number, data: AddContributionRequest) =>
-    fetch(`${BASE_URL}/api/savings/${id}/contributions`, {
+    apiFetch(`${BASE_URL}/api/savings/${id}/contributions`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
