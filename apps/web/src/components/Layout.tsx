@@ -20,7 +20,7 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import SavingsOutlinedIcon from '@mui/icons-material/SavingsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/authState';
 import { concrete, oxide } from '../theme/palette';
 
 const SIDEBAR_WIDTH = 220;

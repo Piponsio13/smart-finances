@@ -1,4 +1,4 @@
-import { BASE_URL, getHeaders, handleResponse } from './client';
+import { BASE_URL, apiFetch, getHeaders, handleResponse } from './client';
 
 export interface Budget {
   id: number;
@@ -24,25 +24,25 @@ export interface UpdateBudgetRequest {
 
 export const budgetsApi = {
   getAll: () =>
-    fetch(`${BASE_URL}/api/budgets`, { headers: getHeaders() })
+    apiFetch(`${BASE_URL}/api/budgets`, { headers: getHeaders() })
       .then((res) => handleResponse<Budget[]>(res)),
 
   create: (data: CreateBudgetRequest) =>
-    fetch(`${BASE_URL}/api/budgets`, {
+    apiFetch(`${BASE_URL}/api/budgets`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<null>(res)),
 
   update: (id: number, data: UpdateBudgetRequest) =>
-    fetch(`${BASE_URL}/api/budgets/${id}`, {
+    apiFetch(`${BASE_URL}/api/budgets/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<Budget>(res)),
 
   delete: (id: number) =>
-    fetch(`${BASE_URL}/api/budgets/${id}`, {
+    apiFetch(`${BASE_URL}/api/budgets/${id}`, {
       method: 'DELETE',
       headers: getHeaders(),
     }).then((res) => handleResponse<null>(res)),

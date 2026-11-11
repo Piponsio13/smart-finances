@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import io.jsonwebtoken.JwtException;
 
 @Slf4j
 @Component
@@ -37,22 +39,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             token = authHeader.substring(7);
             try {
                 username = jwtUtils.extractUsername(token);
-            } catch (Exception e) {
-                log.warn("Invalid JWT token: {}", e.getMessage());
+            } catch (JwtException | IllegalArgumentException e) {
+                log.debug("Rejected invalid JWT");
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
                 User user = (User) customUserDetailsService.loadUserByUsername(username);
-                if (jwtUtils.validateToken(token, user)) {
+                if (jwtUtils.validateToken(token, user) && user.isEnabled()
+                        && user.isAccountNonLocked() && user.isAccountNonExpired()
+                        && user.isCredentialsNonExpired()) {
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-            } catch (Exception e) {
-                log.warn("Authentication failed: {}", e.getMessage());
+            } catch (AuthenticationException | JwtException | IllegalArgumentException e) {
+                log.debug("Rejected JWT authentication");
             }
         }
 

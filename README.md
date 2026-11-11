@@ -31,7 +31,9 @@ Run `mise run db:stop` to stop local PostgreSQL and retain its data.
 
 ## Checks
 
-Run `mise run web:build` and `mise run mobile:typecheck` independently. The API test task expects an isolated PostgreSQL test database and uses the connection and JWT settings from your shell. Export `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, and a test-only `JWT_SECRET` before running `mise run api:test` or the combined `mise run check`. GitHub Actions provisions a test database for the API.
+Run `mise run web:test`, `mise run web:build`, and `mise run mobile:typecheck` independently. The API test task expects an isolated PostgreSQL test database and uses the connection and JWT settings from your shell. Export `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, and a test-only `JWT_SECRET` before running `mise run api:test` or the combined `mise run check`. GitHub Actions provisions a test database for the API.
+
+The web client restores a saved session through `GET /api/auth/me` before displaying protected pages. Expired or rejected tokens return the user to sign-in; temporary connection failures offer retry. Run the API and web changes together. If the web app uses a different origin, add it to the comma-separated `CORS_ALLOWED_ORIGINS` in the API environment.
 
 The Render blueprint uses `apps/api` as its service root. Keep deployment secrets in Render.
 

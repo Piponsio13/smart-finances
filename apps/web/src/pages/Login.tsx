@@ -13,7 +13,7 @@ import {
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { authApi } from '../api/auth';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/authState';
 import type { ApiError } from '../api/client';
 import { concrete } from '../theme/palette';
 
@@ -26,13 +26,15 @@ export default function Login() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (loading) return;
     setError('');
     setLoading(true);
     try {
       const { token } = await authApi.login(form);
       login(token);
     } catch (err) {
-      setError((err as ApiError).message ?? 'Invalid credentials');
+      const apiError = err as ApiError;
+      setError(apiError.fields ? Object.values(apiError.fields).join('. ') : apiError.message ?? 'Unable to sign in');
     } finally {
       setLoading(false);
     }

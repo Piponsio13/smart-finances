@@ -1,4 +1,4 @@
-import { BASE_URL, getHeaders, handleResponse } from './client';
+import { BASE_URL, apiFetch, getHeaders, handleResponse } from './client';
 
 export type BillStatus = 'UPCOMING' | 'DUE_SOON' | 'DUE_TODAY' | 'OVERDUE';
 
@@ -30,25 +30,25 @@ export interface UpdateBillRequest {
 
 export const billsApi = {
   getAll: () =>
-    fetch(`${BASE_URL}/api/bills`, { headers: getHeaders() })
+    apiFetch(`${BASE_URL}/api/bills`, { headers: getHeaders() })
       .then((res) => handleResponse<Bill[]>(res)),
 
   create: (data: CreateBillRequest) =>
-    fetch(`${BASE_URL}/api/bills`, {
+    apiFetch(`${BASE_URL}/api/bills`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<Bill>(res)),
 
   update: (id: number, data: UpdateBillRequest) =>
-    fetch(`${BASE_URL}/api/bills/${id}`, {
+    apiFetch(`${BASE_URL}/api/bills/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
     }).then((res) => handleResponse<Bill>(res)),
 
   delete: (id: number) =>
-    fetch(`${BASE_URL}/api/bills/${id}`, {
+    apiFetch(`${BASE_URL}/api/bills/${id}`, {
       method: 'DELETE',
       headers: getHeaders(),
     }).then((res) => handleResponse<null>(res)),
