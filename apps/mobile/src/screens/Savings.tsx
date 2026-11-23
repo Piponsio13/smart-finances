@@ -14,7 +14,7 @@ import StatusBadge from '../components/StatusBadge';
 import SavingsModal from '../components/modals/SavingsModal';
 import ContributionModal from '../components/modals/ContributionModal';
 import { concrete, moss, ochre } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { savingsApi, type SavingsGoal } from '../api/savings';
 import type { ApiError } from '../api/client';
 
@@ -136,11 +136,11 @@ export default function Savings() {
         {!loading && goals.length > 0 ? (
           <View style={styles.statRow}>
             <View style={styles.statBox}>
-              <Text style={styles.statLabel}>TOTAL SAVED</Text>
+              <Text style={styles.statLabel}>Total saved</Text>
               <Text style={[styles.statValue, { color: moss.main }]}>{formatCurrency(totalSaved)}</Text>
             </View>
             <View style={styles.statBox}>
-              <Text style={styles.statLabel}>COMPLETED</Text>
+              <Text style={styles.statLabel}>Completed</Text>
               <Text style={styles.statValue}>
                 {completedCount} / {goals.length}
               </Text>
@@ -209,16 +209,16 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 },
   flexShrink: { flex: 1, marginRight: 8 },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  goalName: { fontFamily: monoBold, fontSize: 14, color: concrete.void },
-  muted: { fontFamily: mono, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
+  goalName: { fontFamily: headingFont, fontWeight: '600', fontSize: 14, color: concrete.void },
+  muted: { fontFamily: bodyFont, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   amountRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-  amountStrong: { fontFamily: monoBold, color: concrete.void },
-  progressLabel: { fontFamily: mono, fontSize: 10 },
-  progressLabelMuted: { fontFamily: mono, fontSize: 10, color: concrete.aggregate },
+  amountStrong: { fontFamily: headingFont, fontWeight: '600', color: concrete.void },
+  progressLabel: { fontFamily: bodyFont, fontSize: 10 },
+  progressLabelMuted: { fontFamily: bodyFont, fontSize: 12, color: concrete.aggregate },
   completeBadge: { marginTop: 10, alignSelf: 'flex-start' },
   statRow: { flexDirection: 'row', gap: 12 },
-  statBox: { borderWidth: 2, borderColor: concrete.void, padding: 12, flex: 1 },
-  statLabel: { fontFamily: monoBold, fontSize: 9, color: concrete.aggregate, letterSpacing: 1 },
-  statValue: { fontFamily: monoBold, fontSize: 18, color: concrete.void, marginTop: 4 },
+  statBox: { borderWidth: 1, borderRadius: 8, borderColor: concrete.stone, padding: 12, flex: 1 },
+  statLabel: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, color: concrete.aggregate, letterSpacing: 0 },
+  statValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 18, color: concrete.void, marginTop: 4 },
 });

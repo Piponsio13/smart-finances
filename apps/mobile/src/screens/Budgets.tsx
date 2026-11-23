@@ -12,7 +12,7 @@ import Fab from '../components/Fab';
 import StatusBadge from '../components/StatusBadge';
 import BudgetModal from '../components/modals/BudgetModal';
 import { concrete, oxide, ochre } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { budgetsApi, type Budget } from '../api/budgets';
 import { categoriesApi, type Category } from '../api/categories';
 import type { ApiError } from '../api/client';
@@ -167,10 +167,10 @@ export default function Budgets() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 },
-  categoryName: { fontFamily: monoBold, fontSize: 14, color: concrete.void },
-  muted: { fontFamily: mono, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
+  categoryName: { fontFamily: headingFont, fontWeight: '600', fontSize: 14, color: concrete.void },
+  muted: { fontFamily: bodyFont, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   amountRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-  amountStrong: { fontFamily: monoBold, color: concrete.void },
-  progressLabel: { fontFamily: mono, fontSize: 10 },
+  amountStrong: { fontFamily: headingFont, fontWeight: '600', color: concrete.void },
+  progressLabel: { fontFamily: bodyFont, fontSize: 10 },
 });

@@ -11,7 +11,7 @@ import ProgressBar from '../components/ProgressBar';
 import Button from '../components/Button';
 import type { AppTabsParamList } from '../navigation/AppTabs';
 import { concrete, moss, oxide } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { dashboardApi, type DashboardData } from '../api/dashboard';
 import { transactionsApi, type Transaction } from '../api/transactions';
 
@@ -179,13 +179,13 @@ const styles = StyleSheet.create({
   viewAll: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 4 },
   viewAllText: { fontWeight: '600', color: concrete.void, textDecorationLine: 'underline' },
   error: { gap: 12 },
-  muted: { fontFamily: mono, fontSize: 12, color: concrete.aggregate },
+  muted: { fontFamily: bodyFont, fontSize: 12, color: concrete.aggregate },
   categoryList: { gap: 14 },
   categoryRow: { gap: 6 },
   categoryHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  categoryName: { fontFamily: mono, fontSize: 13, color: concrete.void },
+  categoryName: { fontFamily: bodyFont, fontSize: 13, color: concrete.void },
   categoryValues: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  categoryAmount: { fontFamily: monoBold, fontSize: 13, color: concrete.void, minWidth: 68, textAlign: 'right' },
+  categoryAmount: { fontFamily: headingFont, fontWeight: '600', fontSize: 13, color: concrete.void, minWidth: 68, textAlign: 'right' },
   txList: { gap: 12 },
   txRow: {
     flexDirection: 'row',
@@ -197,5 +197,5 @@ const styles = StyleSheet.create({
   },
   txInfo: { flex: 1, gap: 3 },
   txDescription: { fontWeight: '600', fontSize: 14, color: concrete.void },
-  txAmount: { fontFamily: monoBold, fontSize: 13, marginLeft: 12 },
+  txAmount: { fontFamily: headingFont, fontWeight: '600', fontSize: 13, marginLeft: 12 },
 });

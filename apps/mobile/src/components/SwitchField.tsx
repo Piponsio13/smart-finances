@@ -1,6 +1,6 @@
 import { StyleSheet, Switch, Text, View } from 'react-native';
 import { concrete, moss } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { headingFont } from '../theme/typography';
 
 interface SwitchFieldProps {
   label: string;
@@ -11,7 +11,7 @@ interface SwitchFieldProps {
 export default function SwitchField({ label, value, onChange }: SwitchFieldProps) {
   return (
     <View style={styles.row}>
-      <Text style={styles.label}>{label.toUpperCase()}</Text>
+      <Text style={styles.label}>{label}</Text>
       <Switch
         value={value}
         onValueChange={onChange}
@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   label: {
-    fontFamily: monoBold,
+    fontFamily: headingFont, fontWeight: '600',
     fontSize: 11,
-    letterSpacing: 1,
+    letterSpacing: 0,
     color: concrete.void,
   },
 });

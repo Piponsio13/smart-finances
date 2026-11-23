@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { concrete } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { brand, concrete } from '../theme/palette';
+import { headingFont } from '../theme/typography';
 import DashboardScreen from '../screens/Dashboard';
 import TransactionsScreen from '../screens/Transactions';
 import BudgetsScreen from '../screens/Budgets';
@@ -31,10 +31,10 @@ export default function AppTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: concrete.void,
+        tabBarActiveTintColor: brand.main,
         tabBarInactiveTintColor: concrete.aggregate,
-        tabBarStyle: { backgroundColor: concrete.paper, borderTopColor: concrete.void, borderTopWidth: 2 },
-        tabBarLabelStyle: { fontFamily: monoBold, fontSize: 9, letterSpacing: 0.5 },
+        tabBarStyle: { backgroundColor: concrete.paper, borderTopColor: concrete.stone, borderTopWidth: 1 },
+        tabBarLabelStyle: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, letterSpacing: 0 },
         tabBarIcon: ({ color, size }) => (
           <Ionicons name={ICONS[route.name as keyof AppTabsParamList]} color={color} size={size * 0.9} />
         ),

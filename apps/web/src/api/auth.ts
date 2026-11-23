@@ -21,6 +21,11 @@ export interface RegisterRequest {
 }
 
 export const authApi = {
+  socialLogin: (provider: 'google' | 'apple', data: { idToken: string; nonce?: string; name?: string }) =>
+    apiFetch(`${BASE_URL}/api/auth/social/${provider}`, {
+      method: 'POST', headers: getHeaders(null), body: JSON.stringify(data),
+    }).then((res) => handleResponse<{ token: string }>(res)),
+
   login: (data: LoginRequest) =>
     apiFetch(`${BASE_URL}/api/auth/login`, {
       method: 'POST',

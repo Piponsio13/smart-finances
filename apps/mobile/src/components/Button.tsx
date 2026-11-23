@@ -1,6 +1,6 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, type ViewStyle } from 'react-native';
-import { concrete, oxide } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { brand, concrete, oxide, designTokens } from '../theme/palette';
+import { headingFont } from '../theme/typography';
 
 type Variant = 'primary' | 'outline' | 'danger';
 
@@ -18,6 +18,8 @@ export default function Button({ label, onPress, variant = 'primary', disabled, 
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!isDisabled, busy: !!loading }}
       onPress={onPress}
       disabled={isDisabled}
       style={({ pressed }) => [
@@ -31,7 +33,7 @@ export default function Button({ label, onPress, variant = 'primary', disabled, 
       {loading ? (
         <ActivityIndicator color={variant === 'primary' ? concrete.paper : concrete.void} size="small" />
       ) : (
-        <Text style={[styles.label, labelColorStyles[variant]]}>{label.toUpperCase()}</Text>
+        <Text style={[styles.label, labelColorStyles[variant]]}>{label}</Text>
       )}
     </Pressable>
   );
@@ -39,8 +41,9 @@ export default function Button({ label, onPress, variant = 'primary', disabled, 
 
 const styles = StyleSheet.create({
   base: {
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderWidth: 1, borderRadius: designTokens.radii.control,
+    minHeight: 48,
+    borderColor: concrete.stone,
     paddingVertical: 13,
     alignItems: 'center',
     justifyContent: 'center',
@@ -52,14 +55,14 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   label: {
-    fontFamily: monoBold,
-    fontSize: 12,
-    letterSpacing: 1.5,
+    fontFamily: headingFont, fontWeight: '600',
+    fontSize: 14,
+    letterSpacing: 0,
   },
 });
 
 const variantStyles: Record<Variant, ViewStyle> = {
-  primary: { backgroundColor: concrete.void },
+  primary: { backgroundColor: brand.main },
   outline: { backgroundColor: 'transparent' },
   danger: { backgroundColor: oxide.light, borderColor: oxide.main },
 };

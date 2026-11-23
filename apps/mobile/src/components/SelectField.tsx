@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import { concrete } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { concrete, designTokens } from '../theme/palette';
+import { bodyFont, headingFont } from '../theme/typography';
 
 export interface SelectOption {
   value: number | string;
@@ -22,7 +22,7 @@ export default function SelectField({ label, value, options, onChange, placehold
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label.toUpperCase()}</Text>
+      <Text style={styles.label}>{label}</Text>
       <Pressable style={styles.trigger} onPress={() => setOpen(true)}>
         <Text style={selected ? styles.value : styles.placeholder}>
           {selected ? selected.label : placeholder}
@@ -32,7 +32,7 @@ export default function SelectField({ label, value, options, onChange, placehold
       <Modal visible={open} animationType="slide" transparent onRequestClose={() => setOpen(false)}>
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
           <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.sheetTitle}>{label.toUpperCase()}</Text>
+            <Text style={styles.sheetTitle}>{label}</Text>
             <FlatList
               data={options}
               keyExtractor={(item) => String(item.value)}
@@ -54,7 +54,7 @@ export default function SelectField({ label, value, options, onChange, placehold
               )}
             />
             <Pressable style={styles.cancel} onPress={() => setOpen(false)}>
-              <Text style={styles.cancelLabel}>CANCEL</Text>
+              <Text style={styles.cancelLabel}>Cancel</Text>
             </Pressable>
           </Pressable>
         </Pressable>
@@ -66,20 +66,20 @@ export default function SelectField({ label, value, options, onChange, placehold
 const styles = StyleSheet.create({
   container: { gap: 6 },
   label: {
-    fontFamily: monoBold,
-    fontSize: 10,
-    letterSpacing: 1.2,
+    fontFamily: headingFont, fontWeight: '600',
+    fontSize: 12,
+    letterSpacing: 0,
     color: concrete.aggregate,
   },
   trigger: {
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderWidth: 1, borderRadius: designTokens.radii.control,
+    borderColor: concrete.stone,
     backgroundColor: concrete.paper,
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  value: { fontFamily: mono, fontSize: 15, color: concrete.void },
-  placeholder: { fontFamily: mono, fontSize: 15, color: concrete.aggregate },
+  value: { fontFamily: bodyFont, fontSize: 15, color: concrete.void },
+  placeholder: { fontFamily: bodyFont, fontSize: 15, color: concrete.aggregate },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(26,25,24,0.5)',
@@ -87,32 +87,32 @@ const styles = StyleSheet.create({
   },
   sheet: {
     backgroundColor: concrete.paper,
-    borderTopWidth: 3,
-    borderColor: concrete.void,
+    borderTopWidth: 1, borderTopLeftRadius: designTokens.radii.dialog, borderTopRightRadius: designTokens.radii.dialog,
+    borderColor: concrete.stone,
     maxHeight: '70%',
     paddingTop: 16,
     paddingHorizontal: 16,
     paddingBottom: 24,
   },
   sheetTitle: {
-    fontFamily: monoBold,
+    fontFamily: headingFont, fontWeight: '600',
     fontSize: 12,
-    letterSpacing: 1.5,
+    letterSpacing: 0,
     color: concrete.aggregate,
     marginBottom: 8,
   },
   list: { flexGrow: 0 },
   separator: { height: 1, backgroundColor: concrete.stone },
   option: { paddingVertical: 14 },
-  optionLabel: { fontFamily: mono, fontSize: 15, color: concrete.void },
-  optionLabelSelected: { fontFamily: monoBold },
-  empty: { fontFamily: mono, fontSize: 13, color: concrete.aggregate, paddingVertical: 20 },
+  optionLabel: { fontFamily: bodyFont, fontSize: 15, color: concrete.void },
+  optionLabelSelected: { fontFamily: headingFont, fontWeight: '600' },
+  empty: { fontFamily: bodyFont, fontSize: 13, color: concrete.aggregate, paddingVertical: 20 },
   cancel: {
     marginTop: 12,
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderWidth: 1, borderRadius: designTokens.radii.control,
+    borderColor: concrete.stone,
     paddingVertical: 12,
     alignItems: 'center',
   },
-  cancelLabel: { fontFamily: monoBold, fontSize: 12, letterSpacing: 1.5, color: concrete.void },
+  cancelLabel: { fontFamily: headingFont, fontWeight: '600', fontSize: 12, letterSpacing: 0, color: concrete.void },
 });

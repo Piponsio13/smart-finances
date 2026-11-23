@@ -32,6 +32,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.jayway.jsonpath.JsonPath;
 import io.github.piponsio.smartfinances_api.controller.LoginController;
+import io.github.piponsio.smartfinances_api.controller.SocialLoginController;
+import io.github.piponsio.smartfinances_api.service.auth.SocialLoginService;
+import io.github.piponsio.smartfinances_api.dto.response.LoginReponseDto;
 import io.github.piponsio.smartfinances_api.controller.RegisterController;
 import io.github.piponsio.smartfinances_api.entity.User;
 import io.github.piponsio.smartfinances_api.enums.RoleType;
@@ -63,9 +66,10 @@ class AuthenticationFlowTest {
     @EnableWebMvc
     @Import({SecurityConfig.class, JwtAuthenticationFilter.class, JwtUtils.class,
         CustomUserDetailsService.class, LoginController.class, RegisterController.class,
-        LoginServiceImpl.class, RegisterServiceImpl.class, GlobalExceptionHandler.class,
+        LoginServiceImpl.class, RegisterServiceImpl.class, SocialLoginController.class, GlobalExceptionHandler.class,
         ForbiddenController.class})
     static class Config {
+        @Bean SocialLoginService socialLoginService() { return mock(SocialLoginService.class); }
         @Bean UserRepository userRepository() { return mock(UserRepository.class); }
         @Bean CategoryServiceImpl categoryService() { return mock(CategoryServiceImpl.class); }
     }
@@ -77,6 +81,7 @@ class AuthenticationFlowTest {
         public String forbidden() { return "unreachable"; }
     }
 
+    @Autowired SocialLoginService socialLogin;
     @Autowired WebApplicationContext context;
     @Autowired UserRepository users;
     @Autowired PasswordEncoder encoder;
@@ -86,7 +91,7 @@ class AuthenticationFlowTest {
 
     @BeforeEach
     void setUp() {
-        reset(users);
+        reset(users, socialLogin);
         user = new User();
         user.setId(1L);
         user.setName("Alice");
@@ -98,6 +103,22 @@ class AuthenticationFlowTest {
         when(users.save(any(User.class))).thenAnswer(call -> call.getArgument(0));
         mvc = MockMvcBuilders.webAppContextSetup(context)
             .addFilters(context.getBean("springSecurityFilterChain", Filter.class)).build();
+    }
+
+    @Test
+    void providerEndpointsArePublicAndValidateInput() throws Exception {
+        LoginReponseDto response = new LoginReponseDto();
+        response.setToken("app-token");
+        for (String provider : new String[]{"google", "apple"}) {
+            when(socialLogin.login(eq(provider), any())).thenReturn(response);
+            mvc.perform(post("/api/auth/social/" + provider).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"idToken\":\"provider-token\",\"nonce\":\"nonce\"}"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.token").value("app-token"));
+            mvc.perform(post("/api/auth/social/" + provider).contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isBadRequest());
+        }
+        mvc.perform(post("/api/auth/social/unknown").contentType(MediaType.APPLICATION_JSON).content("{}"))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test

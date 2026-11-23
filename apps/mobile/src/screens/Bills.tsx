@@ -11,7 +11,7 @@ import Fab from '../components/Fab';
 import StatusBadge from '../components/StatusBadge';
 import BillModal from '../components/modals/BillModal';
 import { concrete, oxide, ochre } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { billsApi, type Bill, type BillStatus } from '../api/bills';
 import { categoriesApi, type Category } from '../api/categories';
 import type { ApiError } from '../api/client';
@@ -124,11 +124,11 @@ export default function Bills() {
         {!loading && bills.length > 0 ? (
           <View style={styles.statRow}>
             <View style={styles.statBox}>
-              <Text style={styles.statLabel}>MONTHLY TOTAL</Text>
+              <Text style={styles.statLabel}>Monthly total</Text>
               <Text style={[styles.statValue, { color: oxide.main }]}>{formatCurrency(totalMonthly)}</Text>
             </View>
             <View style={styles.statBox}>
-              <Text style={styles.statLabel}>ACTIVE BILLS</Text>
+              <Text style={styles.statLabel}>Active bills</Text>
               <Text style={styles.statValue}>{bills.filter((b) => b.active).length}</Text>
             </View>
           </View>
@@ -181,14 +181,14 @@ const styles = StyleSheet.create({
   inactive: { opacity: 0.55 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 },
   flexShrink: { flex: 1, marginRight: 8 },
-  billName: { fontFamily: monoBold, fontSize: 14, color: concrete.void },
-  muted: { fontFamily: mono, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
+  billName: { fontFamily: headingFont, fontWeight: '600', fontSize: 14, color: concrete.void },
+  muted: { fontFamily: bodyFont, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   footerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  amount: { fontFamily: monoBold, fontSize: 18, color: oxide.main },
+  amount: { fontFamily: headingFont, fontWeight: '600', fontSize: 18, color: oxide.main },
   badges: { flexDirection: 'row', gap: 6 },
   statRow: { flexDirection: 'row', gap: 12 },
-  statBox: { borderWidth: 2, borderColor: concrete.void, padding: 12, flex: 1 },
-  statLabel: { fontFamily: monoBold, fontSize: 9, color: concrete.aggregate, letterSpacing: 1 },
-  statValue: { fontFamily: monoBold, fontSize: 18, color: concrete.void, marginTop: 4 },
+  statBox: { borderWidth: 1, borderRadius: 8, borderColor: concrete.stone, padding: 12, flex: 1 },
+  statLabel: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, color: concrete.aggregate, letterSpacing: 0 },
+  statValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 18, color: concrete.void, marginTop: 4 },
 });

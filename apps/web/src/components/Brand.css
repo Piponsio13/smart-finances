@@ -1,0 +1,6 @@
+.sf-brand { display: inline-flex; align-items: center; gap: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 650; font-size: 21px; letter-spacing: -.7px; text-decoration: none; color: var(--sf-primary); white-space: nowrap; align-self: flex-start; }
+.sf-brand-mark { display: flex; align-items: flex-end; gap: 3px; width: 26px; height: 26px; transform: skew(-12deg); }
+.sf-brand-mark i { display: block; width: 6px; background: var(--sf-primary); border-radius: 2px; }
+.sf-brand-mark i:nth-child(1) { height: 11px; }.sf-brand-mark i:nth-child(2) { height: 18px; }.sf-brand-mark i:nth-child(3) { height: 25px; }
+.sf-brand-dot { color: #658650; }.sf-brand-light { color: #F6F4E9; }.sf-brand-light .sf-brand-mark i { background: var(--sf-accent); }.sf-brand-light .sf-brand-dot { color: var(--sf-accent); }
+@media (max-width: 740px) { .auth-story .sf-brand-light { color: var(--sf-primary); }.auth-story .sf-brand-light .sf-brand-mark i { background: var(--sf-primary); } }

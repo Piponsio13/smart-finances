@@ -32,12 +32,12 @@ describe('authentication forms', () => {
     vi.mocked(authApi.login).mockRejectedValueOnce(new Error('Invalid email or password'));
     render(<MemoryRouter><Login /></MemoryRouter>);
     fillLogin();
-    submit('SIGN IN');
+    submit('Sign in');
     expect(await screen.findByText('Invalid email or password')).toBeDefined();
     expect(login).not.toHaveBeenCalled();
 
     vi.mocked(authApi.login).mockResolvedValueOnce({ token: 'issued-token', name: 'Alice', email: 'alice@example.com' });
-    submit('SIGN IN');
+    submit('Sign in');
     await waitFor(() => expect(login).toHaveBeenCalledWith('issued-token'));
   });
 
@@ -47,7 +47,7 @@ describe('authentication forms', () => {
     }));
     render(<MemoryRouter><Login /></MemoryRouter>);
     fillLogin();
-    submit('SIGN IN');
+    submit('Sign in');
     expect(await screen.findByText('Must be a valid email address')).toBeDefined();
   });
 
@@ -58,10 +58,10 @@ describe('authentication forms', () => {
     fireEvent.change(screen.getByLabelText(/^Full Name/), { target: { value: 'Alice' } });
     fillLogin();
     fireEvent.change(screen.getByLabelText(/^Confirm Password/), { target: { value: 'password123' } });
-    submit('CREATE ACCOUNT');
+    submit('Create account');
     expect(await screen.findByText('Your account was created. Please use Sign In to continue.')).toBeDefined();
-    expect(screen.getByRole('button', { name: 'CREATE ACCOUNT' }).hasAttribute('disabled')).toBe(true);
-    expect(screen.getByRole('link', { name: 'SIGN IN' }).getAttribute('href')).toBe('/login');
+    expect(screen.getByRole('button', { name: 'Create account' }).hasAttribute('disabled')).toBe(true);
+    expect(screen.getByRole('link', { name: /^Sign in$/i }).getAttribute('href')).toBe('/login');
     expect(authApi.register).toHaveBeenCalledOnce();
   });
 });

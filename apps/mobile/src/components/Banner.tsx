@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { oxide } from '../theme/palette';
-import { mono } from '../theme/typography';
+import { oxide, designTokens } from '../theme/palette';
+import { bodyFont } from '../theme/typography';
 
 interface BannerProps {
   message: string;
@@ -17,9 +17,9 @@ export default function Banner({ message }: BannerProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: oxide.light,
-    borderWidth: 2,
+    borderWidth: 1, borderRadius: designTokens.radii.control,
     borderColor: oxide.main,
     padding: 12,
   },
-  text: { fontFamily: mono, fontSize: 12, color: oxide.main },
+  text: { fontFamily: bodyFont, fontSize: 12, color: oxide.main },
 });

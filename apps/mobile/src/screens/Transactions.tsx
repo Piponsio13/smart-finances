@@ -14,7 +14,7 @@ import StatusBadge from '../components/StatusBadge';
 import TransactionModal from '../components/modals/TransactionModal';
 import TransactionFilterModal from '../components/modals/TransactionFilterModal';
 import { concrete, moss, oxide } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { transactionsApi, type Transaction, type TransactionFilters } from '../api/transactions';
 import { categoriesApi, type Category } from '../api/categories';
 import { getHeaders } from '../api/client';
@@ -205,12 +205,12 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   toolbar: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   toolbarSpacer: { flex: 1 },
-  filterCount: { fontFamily: monoBold, fontSize: 10, color: concrete.aggregate, letterSpacing: 1 },
+  filterCount: { fontFamily: headingFont, fontWeight: '600', fontSize: 12, color: concrete.aggregate, letterSpacing: 0 },
   rowTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 },
   flexShrink: { flex: 1, marginRight: 8 },
-  description: { fontFamily: monoBold, fontSize: 14, color: concrete.void },
-  muted: { fontFamily: mono, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
+  description: { fontFamily: headingFont, fontWeight: '600', fontSize: 14, color: concrete.void },
+  muted: { fontFamily: bodyFont, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   rowBottom: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  amount: { fontFamily: monoBold, fontSize: 15 },
+  amount: { fontFamily: headingFont, fontWeight: '600', fontSize: 15 },
 });

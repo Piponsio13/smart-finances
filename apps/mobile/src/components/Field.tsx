@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
-import { StyleSheet, Text, TextInput, View, type KeyboardTypeOptions, type ViewStyle } from 'react-native';
-import { concrete } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { Ionicons } from '@expo/vector-icons';
+import { useState, type ReactNode } from 'react';
+import { StyleSheet, Text, TextInput, View, Pressable, type KeyboardTypeOptions, type ViewStyle } from 'react-native';
+import { brand, concrete, designTokens } from '../theme/palette';
+import { bodyFont, headingFont } from '../theme/typography';
 
 interface FieldProps {
   label: string;
@@ -32,23 +33,28 @@ export default function Field({
   style,
   rightAccessory,
 }: FieldProps) {
+  const [focused, setFocused] = useState(false);
+  const [visible, setVisible] = useState(false);
   return (
     <View style={[styles.container, style]}>
-      <Text style={styles.label}>{label.toUpperCase()}</Text>
-      <View style={styles.inputRow}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={[styles.inputRow, focused && styles.focused]}>
         <TextInput
-          style={[styles.input, rightAccessory ? styles.inputWithAccessory : null]}
+          accessibilityLabel={label}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          style={[styles.input, rightAccessory || secureTextEntry ? styles.inputWithAccessory : null]}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={concrete.aggregate}
           keyboardType={keyboardType}
-          secureTextEntry={secureTextEntry}
+          secureTextEntry={secureTextEntry && !visible}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
           maxLength={maxLength}
         />
-        {rightAccessory ? <View style={styles.accessory}>{rightAccessory}</View> : null}
+        {rightAccessory ? <View style={styles.accessory}>{rightAccessory}</View> : secureTextEntry ? <Pressable accessibilityRole="button" accessibilityLabel={visible ? 'Hide password' : 'Show password'} hitSlop={8} onPress={() => setVisible(!visible)} style={styles.accessory}><Ionicons name={visible ? 'eye-off-outline' : 'eye-outline'} size={20} color={concrete.aggregate} /></Pressable> : null}
       </View>
       {helperText ? <Text style={styles.helper}>{helperText}</Text> : null}
     </View>
@@ -60,25 +66,26 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   label: {
-    fontFamily: monoBold,
-    fontSize: 10,
-    letterSpacing: 1.2,
+    fontFamily: headingFont, fontWeight: '600',
+    fontSize: 12,
+    letterSpacing: 0,
     color: concrete.aggregate,
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderWidth: 1, borderRadius: designTokens.radii.control,
+    borderColor: concrete.stone,
     backgroundColor: concrete.paper,
   },
+  focused: { borderColor: brand.main },
   input: {
     flex: 1,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
+    paddingVertical: 13,
+    fontSize: 16,
     color: concrete.void,
-    fontFamily: mono,
+    fontFamily: bodyFont,
   },
   inputWithAccessory: {
     paddingRight: 4,
@@ -87,8 +94,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   helper: {
-    fontFamily: mono,
-    fontSize: 10,
+    fontFamily: bodyFont,
+    fontSize: 12,
     color: concrete.aggregate,
   },
 });

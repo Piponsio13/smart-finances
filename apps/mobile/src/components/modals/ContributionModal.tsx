@@ -4,7 +4,7 @@ import FormModal from '../FormModal';
 import Field from '../Field';
 import DateField from '../DateField';
 import { concrete } from '../../theme/palette';
-import { mono } from '../../theme/typography';
+import { bodyFont } from '../../theme/typography';
 import type { SavingsGoal, AddContributionRequest } from '../../api/savings';
 import type { ApiError } from '../../api/client';
 
@@ -82,7 +82,7 @@ export default function ContributionModal({ open, goal, onAdd, onClose }: Contri
 
 const styles = StyleSheet.create({
   goalName: {
-    fontFamily: mono,
+    fontFamily: bodyFont,
     fontSize: 12,
     color: concrete.aggregate,
     marginTop: -8,

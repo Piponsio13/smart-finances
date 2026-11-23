@@ -27,10 +27,10 @@ function formatCurrency(value: number): string {
 }
 
 const STATUS_CONFIG: Record<BillStatus, { label: string; bg: string; color: string }> = {
-  UPCOMING:  { label: 'UPCOMING',  bg: concrete.stone, color: concrete.aggregate },
+  UPCOMING:  { label: 'Upcoming',  bg: concrete.stone, color: concrete.aggregate },
   DUE_SOON:  { label: 'DUE SOON',  bg: ochre.light,    color: ochre.main },
   DUE_TODAY: { label: 'DUE TODAY', bg: oxide.light,    color: oxide.main },
-  OVERDUE:   { label: 'OVERDUE',   bg: oxide.main,     color: '#FFFFFF' },
+  OVERDUE:   { label: 'Overdue',   bg: oxide.main,     color: '#FFFFFF' },
 };
 
 function BillCard({
@@ -70,17 +70,17 @@ function BillCard({
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography sx={{ fontFamily: '"Space Mono", monospace', fontWeight: 700, fontSize: 18, color: oxide.main }}>
+          <Typography sx={{ fontFamily: 'inherit', fontWeight: 700, fontSize: 18, color: oxide.main }}>
             {formatCurrency(bill.amount)}
           </Typography>
           <Box sx={{ display: 'flex', gap: 1 }}>
             {!bill.active && (
-              <Chip label="INACTIVE" size="small" sx={{ bgcolor: concrete.stone, color: concrete.aggregate, fontSize: 10, fontWeight: 700 }} />
+              <Chip label="Inactive" size="small" sx={{ bgcolor: concrete.stone, color: concrete.aggregate, fontSize: 12, fontWeight: 700 }} />
             )}
             <Chip
               label={status.label}
               size="small"
-              sx={{ bgcolor: status.bg, color: status.color, fontFamily: '"Space Mono", monospace', fontSize: 10, fontWeight: 700 }}
+              sx={{ bgcolor: status.bg, color: status.color, fontFamily: 'inherit', fontSize: 12, fontWeight: 700 }}
             />
           </Box>
         </Box>
@@ -144,7 +144,7 @@ export default function Bills() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Bill Reminders</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
             Track recurring bills and due dates
           </Typography>
         </Box>
@@ -168,19 +168,19 @@ export default function Bills() {
 
       {!loading && bills.length > 0 && (
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-          <Box sx={{ p: 2, border: `2px solid ${concrete.void}` }}>
-            <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Box sx={{ p: 2, border: `1px solid ${concrete.stone}` }}>
+            <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
               Monthly Total
             </Typography>
-            <Typography sx={{ fontSize: 20, fontWeight: 700, color: oxide.main, fontFamily: '"Space Mono", monospace' }}>
+            <Typography sx={{ fontSize: 20, fontWeight: 700, color: oxide.main, fontFamily: 'inherit' }}>
               {formatCurrency(totalMonthly)}
             </Typography>
           </Box>
-          <Box sx={{ p: 2, border: `2px solid ${concrete.void}` }}>
-            <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Box sx={{ p: 2, border: `1px solid ${concrete.stone}` }}>
+            <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
               Active Bills
             </Typography>
-            <Typography sx={{ fontSize: 20, fontWeight: 700, color: concrete.void, fontFamily: '"Space Mono", monospace' }}>
+            <Typography sx={{ fontSize: 20, fontWeight: 700, color: concrete.void, fontFamily: 'inherit' }}>
               {bills.filter((b) => b.active).length}
             </Typography>
           </Box>

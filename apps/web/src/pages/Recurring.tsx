@@ -92,7 +92,7 @@ export default function Recurring() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Recurring Transactions</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
             Auto-generated daily, weekly, monthly, or yearly
           </Typography>
         </Box>
@@ -151,10 +151,10 @@ export default function Recurring() {
                         <Typography
                           sx={{
                             fontSize: 11,
-                            fontFamily: '"Space Mono", monospace',
+                            fontFamily: 'inherit',
                             fontWeight: 700,
                             color: ochre.main,
-                            textTransform: 'uppercase',
+                            textTransform: 'none',
                             letterSpacing: 0.5,
                           }}
                         >
@@ -165,7 +165,7 @@ export default function Recurring() {
                         {item.nextDueDate ? formatDate(item.nextDueDate) : '—'}
                       </TableCell>
                       <TableCell align="right">
-                        <Typography sx={{ fontFamily: '"Space Mono", monospace', fontWeight: 700, fontSize: 13, color: item.type === 'INCOME' ? moss.main : oxide.main }}>
+                        <Typography sx={{ fontFamily: 'inherit', fontWeight: 700, fontSize: 13, color: item.type === 'INCOME' ? moss.main : oxide.main }}>
                           {item.type === 'INCOME' ? '+' : '-'}{formatCurrency(item.amount)}
                         </Typography>
                       </TableCell>
@@ -176,8 +176,8 @@ export default function Recurring() {
                           sx={{
                             bgcolor: item.active ? moss.light : concrete.stone,
                             color: item.active ? moss.main : concrete.aggregate,
-                            fontFamily: '"Space Mono", monospace',
-                            fontSize: 10,
+                            fontFamily: 'inherit',
+                            fontSize: 12,
                             fontWeight: 700,
                           }}
                         />

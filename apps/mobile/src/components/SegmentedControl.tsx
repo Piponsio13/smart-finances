@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { concrete, moss, oxide } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { concrete, moss, oxide, designTokens } from '../theme/palette';
+import { headingFont } from '../theme/typography';
 
 interface Option<T extends string> {
   value: T;
@@ -26,13 +26,15 @@ export default function SegmentedControl<T extends string>({ options, value, onC
         const accent = ACCENT[opt.value];
         return (
           <Pressable
+            accessibilityRole="radio"
+            accessibilityState={{ selected }}
             key={opt.value}
             onPress={() => onChange(opt.value)}
             style={[
               styles.segment,
               selected && {
                 backgroundColor: accent ? accent.light : concrete.stone,
-                borderColor: concrete.void,
+                borderColor: concrete.stone,
               },
             ]}
           >
@@ -42,7 +44,7 @@ export default function SegmentedControl<T extends string>({ options, value, onC
                 selected && { color: accent ? accent.main : concrete.void },
               ]}
             >
-              {opt.label.toUpperCase()}
+              {opt.label}
             </Text>
           </Pressable>
         );
@@ -57,15 +59,17 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   segment: {
-    borderWidth: 2,
+    minHeight: 44,
+    justifyContent: 'center',
+    borderWidth: 1, borderRadius: designTokens.radii.control,
     borderColor: concrete.stone,
     paddingVertical: 8,
     paddingHorizontal: 16,
   },
   label: {
-    fontFamily: monoBold,
+    fontFamily: headingFont, fontWeight: '600',
     fontSize: 11,
-    letterSpacing: 1,
+    letterSpacing: 0,
     color: concrete.aggregate,
   },
 });

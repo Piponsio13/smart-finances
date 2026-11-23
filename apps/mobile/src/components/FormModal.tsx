@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { concrete } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { concrete, designTokens } from '../theme/palette';
+import { headingFont } from '../theme/typography';
 import Button from './Button';
 import Banner from './Banner';
 
@@ -34,7 +34,7 @@ export default function FormModal({
           style={styles.sheetWrap}
         >
           <View style={styles.sheet}>
-            <Text style={styles.title}>{title.toUpperCase()}</Text>
+            <Text style={styles.title}>{title}</Text>
             <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
               {error ? <Banner message={error} /> : null}
               {children}
@@ -61,16 +61,16 @@ const styles = StyleSheet.create({
   },
   sheet: {
     backgroundColor: concrete.paper,
-    borderTopWidth: 3,
-    borderColor: concrete.void,
+    borderTopWidth: 1, borderTopLeftRadius: designTokens.radii.dialog, borderTopRightRadius: designTokens.radii.dialog,
+    borderColor: concrete.stone,
     paddingTop: 20,
     paddingHorizontal: 16,
     paddingBottom: 24,
   },
   title: {
-    fontFamily: monoBold,
+    fontFamily: headingFont, fontWeight: '600',
     fontSize: 14,
-    letterSpacing: 1.5,
+    letterSpacing: 0,
     color: concrete.void,
     marginBottom: 16,
   },

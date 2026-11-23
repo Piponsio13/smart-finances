@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
-import { concrete } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { concrete, designTokens } from '../theme/palette';
+import { headingFont } from '../theme/typography';
 
 interface StatCardProps {
   title: string;
@@ -17,7 +17,7 @@ export default function StatCard({ title, value, icon, color, bgColor }: StatCar
     <Card style={styles.card}>
       <View style={styles.row}>
         <View style={styles.text}>
-          <Text style={styles.title}>{title.toUpperCase()}</Text>
+          <Text style={styles.title}>{title}</Text>
           <Text style={[styles.value, { color }]}>{value}</Text>
         </View>
         <View style={[styles.iconBox, { backgroundColor: bgColor }]}>{icon}</View>
@@ -31,19 +31,19 @@ const styles = StyleSheet.create({
   row: { gap: 8, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
   text: { flex: 1, gap: 6 },
   title: {
-    fontFamily: monoBold,
+    fontFamily: headingFont, fontWeight: '600',
     fontSize: 11,
-    letterSpacing: 0.5,
+    letterSpacing: 0,
     color: concrete.aggregate,
   },
   value: {
-    fontFamily: monoBold,
+    fontFamily: headingFont, fontWeight: '600',
     fontSize: 18,
   },
   iconBox: {
     width: 34,
     height: 34,
-    borderRadius: 8,
+    borderRadius: designTokens.radii.control,
     alignItems: 'center',
     justifyContent: 'center',
   },

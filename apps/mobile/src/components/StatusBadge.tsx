@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { concrete } from '../theme/palette';
-import { monoBold } from '../theme/typography';
+import { headingFont } from '../theme/typography';
 
 interface StatusBadgeProps {
   label: string;
@@ -11,21 +10,21 @@ interface StatusBadgeProps {
 export default function StatusBadge({ label, color, bgColor }: StatusBadgeProps) {
   return (
     <View style={[styles.badge, { backgroundColor: bgColor, borderColor: color }]}>
-      <Text style={[styles.label, { color }]}>{label.toUpperCase()}</Text>
+      <Text style={[styles.label, { color }]}>{label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   badge: {
-    borderWidth: 1.5,
+    borderWidth: 0, borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
     alignSelf: 'flex-start',
   },
   label: {
-    fontFamily: monoBold,
-    fontSize: 9,
-    letterSpacing: 1,
+    fontFamily: headingFont, fontWeight: '600',
+    fontSize: 11,
+    letterSpacing: 0,
   },
 });

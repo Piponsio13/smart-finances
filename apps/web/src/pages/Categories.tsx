@@ -90,7 +90,7 @@ export default function Categories() {
               sx={{
                 width: 36,
                 height: 36,
-                border: `2px solid ${concrete.void}`,
+                border: `1px solid ${concrete.stone}`, borderRadius: 2,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -108,7 +108,7 @@ export default function Categories() {
               <Typography variant="h6" sx={{ color: isIncome ? moss.main : oxide.main, fontSize: 14 }}>
                 {title}
               </Typography>
-              <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+              <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
                 {items.length} {items.length === 1 ? 'category' : 'categories'}
               </Typography>
             </Box>
@@ -150,7 +150,7 @@ export default function Categories() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Categories</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
             Organize your transactions with custom categories
           </Typography>
         </Box>

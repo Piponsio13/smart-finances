@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
 import { concrete } from '../theme/palette';
-import { mono } from '../theme/typography';
+import { bodyFont } from '../theme/typography';
 
 interface EmptyStateProps {
   message: string;
@@ -17,5 +17,5 @@ export default function EmptyState({ message }: EmptyStateProps) {
 
 const styles = StyleSheet.create({
   card: { paddingVertical: 32, alignItems: 'center' },
-  text: { fontFamily: mono, fontSize: 13, color: concrete.aggregate, textAlign: 'center' },
+  text: { fontFamily: bodyFont, fontSize: 13, color: concrete.aggregate, textAlign: 'center' },
 });

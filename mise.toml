@@ -59,7 +59,7 @@ run = "npm exec --no -- tsc --noEmit"
 
 [tasks.check]
 description = "Run API tests, build web, and type-check mobile"
-depends = ["api:test", "web:test", "web:build", "mobile:typecheck"]
+depends = ["design:check", "api:test", "web:test", "web:build", "mobile:typecheck"]
 
 [tasks."stack:up"]
 description = "Build and start the UI, API, Expo, and PostgreSQL containers"
@@ -74,3 +74,11 @@ docker compose --env-file apps/api/.env up -d --build
 [tasks."stack:down"]
 description = "Stop the Docker stack and keep its database volume"
 run = "docker compose --env-file apps/api/.env down"
+
+[tasks."design:sync"]
+description = "Generate matching web and mobile design tokens"
+run = "node scripts/sync-design-tokens.mjs"
+
+[tasks."design:check"]
+description = "Check that generated design tokens match their source"
+run = "node scripts/sync-design-tokens.mjs --check"

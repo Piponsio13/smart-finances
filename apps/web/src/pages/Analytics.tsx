@@ -40,12 +40,12 @@ function BarChart({ trends }: { trends: MonthTrend[] }) {
     <Box>
       <Box sx={{ display: 'flex', gap: 1.5, mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <Box sx={{ width: 10, height: 10, bgcolor: moss.main, border: `2px solid ${concrete.void}` }} />
-          <Typography variant="caption" sx={{ fontFamily: '"Space Mono", monospace', fontSize: 10 }}>INCOME</Typography>
+          <Box sx={{ width: 10, height: 10, bgcolor: moss.main, border: `1px solid ${concrete.stone}` }} />
+          <Typography variant="caption" sx={{ fontFamily: 'inherit', fontSize: 10 }}>Income</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <Box sx={{ width: 10, height: 10, bgcolor: oxide.main, border: `2px solid ${concrete.void}` }} />
-          <Typography variant="caption" sx={{ fontFamily: '"Space Mono", monospace', fontSize: 10 }}>EXPENSES</Typography>
+          <Box sx={{ width: 10, height: 10, bgcolor: oxide.main, border: `1px solid ${concrete.stone}` }} />
+          <Typography variant="caption" sx={{ fontFamily: 'inherit', fontSize: 10 }}>Expenses</Typography>
         </Box>
       </Box>
 
@@ -55,8 +55,8 @@ function BarChart({ trends }: { trends: MonthTrend[] }) {
           alignItems: 'flex-end',
           gap: 0.5,
           height: chartHeight,
-          borderBottom: `2px solid ${concrete.void}`,
-          borderLeft: `2px solid ${concrete.void}`,
+          borderBottom: `1px solid ${concrete.stone}`,
+          borderLeft: `1px solid ${concrete.stone}`,
           px: 1,
           pb: 0,
           overflow: 'hidden',
@@ -92,9 +92,9 @@ function BarChart({ trends }: { trends: MonthTrend[] }) {
             <Typography
               sx={{
                 fontSize: 9,
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: 'inherit',
                 color: concrete.aggregate,
-                textTransform: 'uppercase',
+                textTransform: 'none',
                 mt: 0.5,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -123,7 +123,7 @@ function TrendRow({ trend }: { trend: MonthTrend }) {
         '&:last-child': { border: 'none' },
       }}
     >
-      <Typography sx={{ fontSize: 11, fontFamily: '"Space Mono", monospace', color: concrete.aggregate }}>
+      <Typography sx={{ fontSize: 11, fontFamily: 'inherit', color: concrete.aggregate }}>
         {MONTH_ABBR[trend.month - 1]} {trend.year}
       </Typography>
       <Typography sx={{ fontSize: 13, fontWeight: 600, color: moss.main }}>
@@ -144,7 +144,7 @@ function TrendRow({ trend }: { trend: MonthTrend }) {
       <Typography
         sx={{
           fontSize: 11,
-          fontFamily: '"Space Mono", monospace',
+          fontFamily: 'inherit',
           color: pctColor(trend.incomeChangePercent, true),
           display: 'flex',
           alignItems: 'center',
@@ -162,7 +162,7 @@ function TrendRow({ trend }: { trend: MonthTrend }) {
       <Typography
         sx={{
           fontSize: 11,
-          fontFamily: '"Space Mono", monospace',
+          fontFamily: 'inherit',
           color: pctColor(trend.expenseChangePercent, false),
         }}
       >
@@ -180,7 +180,7 @@ function CategoryBar({ cat, max }: { cat: CategoryTrend; max: number }) {
         <Typography variant="body2" sx={{ fontWeight: 500 }}>{cat.categoryName}</Typography>
         <Typography
           variant="body2"
-          sx={{ fontFamily: '"Space Mono", monospace', fontWeight: 700 }}
+          sx={{ fontFamily: 'inherit', fontWeight: 700 }}
         >
           {formatCurrency(cat.total)}
         </Typography>
@@ -209,17 +209,19 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
     Promise.allSettled([
       analyticsApi.trends(months),
       analyticsApi.categoryTrends(months),
       analyticsApi.forecast(months),
     ]).then(([trendsResult, catResult, forecastResult]) => {
+      if (!active) return;
       setTrends(trendsResult.status === 'fulfilled' ? trendsResult.value : []);
       setCatTrends(catResult.status === 'fulfilled' ? catResult.value : []);
       setForecast(forecastResult.status === 'fulfilled' ? forecastResult.value : null);
       setLoading(false);
     });
+    return () => { active = false; };
   }, [months]);
 
   const catMax = catTrends.length > 0 ? catTrends[0].total : 1;
@@ -240,10 +242,10 @@ export default function Analytics() {
             sx={{
               mt: 0.5,
               fontSize: 12,
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: 'inherit',
               color: concrete.aggregate,
-              textTransform: 'uppercase',
-              letterSpacing: 1,
+              textTransform: 'none',
+              letterSpacing: 0,
             }}
           >
             Spending trends and patterns
@@ -253,20 +255,20 @@ export default function Analytics() {
         <ToggleButtonGroup
           value={months}
           exclusive
-          onChange={(_, v) => { if (v !== null) setMonths(v); }}
+          onChange={(_, v) => { if (v !== null && v !== months) { setLoading(true); setMonths(v); } }}
           size="small"
           sx={{
             '& .MuiToggleButton-root': {
-              fontFamily: '"Space Mono", monospace',
+              fontFamily: 'inherit',
               fontSize: 11,
               fontWeight: 700,
-              letterSpacing: 1,
+              letterSpacing: 0,
               px: 1.5,
-              border: `2px solid ${concrete.void}`,
+              border: `1px solid ${concrete.stone}`, borderRadius: 2,
               '&.Mui-selected': {
-                bgcolor: concrete.void,
+                bgcolor: 'primary.main',
                 color: concrete.paper,
-                '&:hover': { bgcolor: concrete.void },
+                '&:hover': { bgcolor: 'primary.main' },
               },
             },
           }}
@@ -294,12 +296,12 @@ export default function Analytics() {
                 <CardContent sx={{ p: 2.5 }}>
                   <Typography
                     sx={{
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1.5,
+                      textTransform: 'none',
+                      letterSpacing: 0,
                       color: concrete.aggregate,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                       mb: 0.5,
                     }}
                   >
@@ -310,7 +312,7 @@ export default function Analytics() {
                       fontSize: 22,
                       fontWeight: 700,
                       color: moss.main,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                     }}
                   >
                     {formatCurrency(totalIncome)}
@@ -323,12 +325,12 @@ export default function Analytics() {
                 <CardContent sx={{ p: 2.5 }}>
                   <Typography
                     sx={{
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1.5,
+                      textTransform: 'none',
+                      letterSpacing: 0,
                       color: concrete.aggregate,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                       mb: 0.5,
                     }}
                   >
@@ -339,7 +341,7 @@ export default function Analytics() {
                       fontSize: 22,
                       fontWeight: 700,
                       color: oxide.main,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                     }}
                   >
                     {formatCurrency(totalExpenses)}
@@ -352,12 +354,12 @@ export default function Analytics() {
                 <CardContent sx={{ p: 2.5 }}>
                   <Typography
                     sx={{
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: 1.5,
+                      textTransform: 'none',
+                      letterSpacing: 0,
                       color: concrete.aggregate,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                       mb: 0.5,
                     }}
                   >
@@ -368,16 +370,16 @@ export default function Analytics() {
                       fontSize: 22,
                       fontWeight: 700,
                       color: avgBalance >= 0 ? moss.main : oxide.main,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                     }}
                   >
                     {formatCurrency(avgBalance)}
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: 10,
+                      fontSize: 12,
                       color: concrete.aggregate,
-                      fontFamily: '"Space Mono", monospace',
+                      fontFamily: 'inherit',
                       mt: 0.5,
                     }}
                   >
@@ -419,7 +421,7 @@ export default function Analytics() {
                           gap: 1,
                           pb: 1,
                           mb: 0.5,
-                          borderBottom: `2px solid ${concrete.void}`,
+                          borderBottom: `1px solid ${concrete.stone}`,
                         }}
                       >
                         {['Month', 'Income', 'Expenses', 'Balance', 'Inc %', 'Exp %'].map((h) => (
@@ -428,9 +430,9 @@ export default function Analytics() {
                             sx={{
                               fontSize: 9,
                               fontWeight: 700,
-                              textTransform: 'uppercase',
-                              letterSpacing: 1,
-                              fontFamily: '"Space Mono", monospace',
+                              textTransform: 'none',
+                              letterSpacing: 0,
+                              fontFamily: 'inherit',
                               color: concrete.aggregate,
                             }}
                           >
@@ -458,7 +460,7 @@ export default function Analytics() {
                   ) : (
                     <>
                       <Box sx={{ mb: 2 }}>
-                        <Typography variant="caption" sx={{ color: concrete.aggregate, fontFamily: '"Space Mono", monospace', fontSize: 10, textTransform: 'uppercase', letterSpacing: 1 }}>
+                        <Typography variant="caption" sx={{ color: concrete.aggregate, fontFamily: 'inherit', fontSize: 12, textTransform: 'none', letterSpacing: 0 }}>
                           Total over {months} months
                         </Typography>
                       </Box>
@@ -478,7 +480,7 @@ export default function Analytics() {
                 <Typography variant="h6" sx={{ mb: 0.5 }}>
                   Next Month Forecast
                 </Typography>
-                <Typography variant="caption" sx={{ color: concrete.aggregate, fontFamily: '"Space Mono", monospace', fontSize: 10, textTransform: 'uppercase', letterSpacing: 1 }}>
+                <Typography variant="caption" sx={{ color: concrete.aggregate, fontFamily: 'inherit', fontSize: 12, textTransform: 'none', letterSpacing: 0 }}>
                   {MONTH_ABBR[forecast.forecastMonth - 1]} {forecast.forecastYear} — based on last {forecast.basedOnMonths} months (weighted avg)
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', mt: 2, mb: 2.5 }}>
@@ -488,10 +490,10 @@ export default function Analytics() {
                     { label: 'Projected Balance', value: forecast.projectedBalance, color: forecast.projectedBalance >= 0 ? moss.main : oxide.main },
                   ].map((item) => (
                     <Box key={item.label}>
-                      <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1, mb: 0.25 }}>
+                      <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0, mb: 0.25 }}>
                         {item.label}
                       </Typography>
-                      <Typography sx={{ fontSize: 20, fontWeight: 700, color: item.color, fontFamily: '"Space Mono", monospace' }}>
+                      <Typography sx={{ fontSize: 20, fontWeight: 700, color: item.color, fontFamily: 'inherit' }}>
                         {formatCurrency(item.value)}
                       </Typography>
                     </Box>
@@ -499,14 +501,14 @@ export default function Analytics() {
                 </Box>
                 {forecast.categoryForecasts.length > 0 && (
                   <>
-                    <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1, mb: 1.5 }}>
+                    <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0, mb: 1.5 }}>
                       Category Forecasts
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       {forecast.categoryForecasts.map((cf) => (
                         <Box key={cf.categoryName} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <Typography variant="body2">{cf.categoryName}</Typography>
-                          <Typography variant="body2" sx={{ fontFamily: '"Space Mono", monospace', fontWeight: 600, color: oxide.main }}>
+                          <Typography variant="body2" sx={{ fontFamily: 'inherit', fontWeight: 600, color: oxide.main }}>
                             {formatCurrency(cf.projectedAmount)}
                           </Typography>
                         </Box>
@@ -528,17 +530,17 @@ export default function Analytics() {
                       key={`${t.year}-${t.month}`}
                       sx={{
                         p: 2,
-                        border: `2px solid ${concrete.void}`,
+                        border: `1px solid ${concrete.stone}`, borderRadius: 2,
                         minWidth: 140,
                       }}
                     >
                       <Typography
                         sx={{
-                          fontSize: 10,
-                          fontFamily: '"Space Mono", monospace',
+                          fontSize: 12,
+                          fontFamily: 'inherit',
                           color: concrete.aggregate,
-                          textTransform: 'uppercase',
-                          letterSpacing: 1,
+                          textTransform: 'none',
+                          letterSpacing: 0,
                           mb: 1,
                         }}
                       >
@@ -549,7 +551,7 @@ export default function Analytics() {
                           <Typography variant="caption" color="text.secondary">Inc</Typography>
                           <Typography
                             variant="caption"
-                            sx={{ fontFamily: '"Space Mono", monospace', fontWeight: 700, color: pctColor(t.incomeChangePercent, true) }}
+                            sx={{ fontFamily: 'inherit', fontWeight: 700, color: pctColor(t.incomeChangePercent, true) }}
                           >
                             {formatPct(t.incomeChangePercent)}
                           </Typography>
@@ -558,7 +560,7 @@ export default function Analytics() {
                           <Typography variant="caption" color="text.secondary">Exp</Typography>
                           <Typography
                             variant="caption"
-                            sx={{ fontFamily: '"Space Mono", monospace', fontWeight: 700, color: pctColor(t.expenseChangePercent, false) }}
+                            sx={{ fontFamily: 'inherit', fontWeight: 700, color: pctColor(t.expenseChangePercent, false) }}
                           >
                             {formatPct(t.expenseChangePercent)}
                           </Typography>

@@ -7,7 +7,7 @@ import Card from '../components/Card';
 import EmptyState from '../components/EmptyState';
 import SegmentedControl from '../components/SegmentedControl';
 import { concrete, moss, oxide } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import {
   analyticsApi,
   type MonthTrend,
@@ -41,11 +41,11 @@ function BarChart({ trends }: { trends: MonthTrend[] }) {
       <View style={styles.legendRow}>
         <View style={styles.legendItem}>
           <View style={[styles.legendSwatch, { backgroundColor: moss.main }]} />
-          <Text style={styles.legendLabel}>INCOME</Text>
+          <Text style={styles.legendLabel}>Income</Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendSwatch, { backgroundColor: oxide.main }]} />
-          <Text style={styles.legendLabel}>EXPENSES</Text>
+          <Text style={styles.legendLabel}>Expenses</Text>
         </View>
       </View>
 
@@ -184,7 +184,7 @@ export default function Analytics() {
             </View>
           </View>
           <View style={styles.statBoxFull}>
-            <Text style={styles.statLabel}>AVG MONTHLY BALANCE</Text>
+            <Text style={styles.statLabel}>Avg monthly balance</Text>
             <Text style={[styles.statValue, { color: avgBalance >= 0 ? moss.main : oxide.main }]}>{formatCurrency(avgBalance)}</Text>
             <Text style={styles.muted}>Across {activeMonths.length} active month{activeMonths.length === 1 ? '' : 's'}</Text>
           </View>
@@ -232,15 +232,15 @@ export default function Analytics() {
 
               <View style={styles.forecastRow}>
                 <View style={styles.forecastItem}>
-                  <Text style={styles.mutedCaps}>PROJECTED INCOME</Text>
+                  <Text style={styles.mutedCaps}>Projected income</Text>
                   <Text style={[styles.forecastValue, { color: moss.main }]}>{formatCurrency(forecast.projectedIncome)}</Text>
                 </View>
                 <View style={styles.forecastItem}>
-                  <Text style={styles.mutedCaps}>PROJECTED EXPENSES</Text>
+                  <Text style={styles.mutedCaps}>Projected expenses</Text>
                   <Text style={[styles.forecastValue, { color: oxide.main }]}>{formatCurrency(forecast.projectedExpenses)}</Text>
                 </View>
                 <View style={styles.forecastItem}>
-                  <Text style={styles.mutedCaps}>PROJECTED BALANCE</Text>
+                  <Text style={styles.mutedCaps}>Projected balance</Text>
                   <Text style={[styles.forecastValue, { color: forecast.projectedBalance >= 0 ? moss.main : oxide.main }]}>
                     {formatCurrency(forecast.projectedBalance)}
                   </Text>
@@ -249,7 +249,7 @@ export default function Analytics() {
 
               {forecast.categoryForecasts.length > 0 ? (
                 <View style={styles.forecastCategories}>
-                  <Text style={styles.mutedCaps}>CATEGORY FORECASTS</Text>
+                  <Text style={styles.mutedCaps}>Category forecasts</Text>
                   {forecast.categoryForecasts.map((cf) => (
                     <View key={cf.categoryName} style={styles.forecastCatRow}>
                       <Text style={styles.trendLabel}>{cf.categoryName}</Text>
@@ -292,58 +292,58 @@ export default function Analytics() {
 }
 
 const styles = StyleSheet.create({
-  cardTitle: { fontFamily: monoBold, fontSize: 14, color: concrete.void, marginBottom: 12 },
-  muted: { fontFamily: mono, fontSize: 12, color: concrete.aggregate },
-  mutedCaps: { fontFamily: monoBold, fontSize: 9, color: concrete.aggregate, letterSpacing: 1 },
+  cardTitle: { fontFamily: headingFont, fontWeight: '600', fontSize: 14, color: concrete.void, marginBottom: 12 },
+  muted: { fontFamily: bodyFont, fontSize: 12, color: concrete.aggregate },
+  mutedCaps: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, color: concrete.aggregate, letterSpacing: 0 },
 
   statRow: { flexDirection: 'row', gap: 12 },
-  statBox: { flex: 1, borderWidth: 2, borderColor: concrete.void, padding: 12, backgroundColor: concrete.paper },
-  statBoxFull: { borderWidth: 2, borderColor: concrete.void, padding: 12, backgroundColor: concrete.paper, gap: 4 },
-  statLabel: { fontFamily: monoBold, fontSize: 9, color: concrete.aggregate, letterSpacing: 1 },
-  statValue: { fontFamily: monoBold, fontSize: 18, marginTop: 4 },
+  statBox: { flex: 1, borderWidth: 1, borderRadius: 8, borderColor: concrete.stone, padding: 12, backgroundColor: concrete.paper },
+  statBoxFull: { borderWidth: 1, borderRadius: 8, borderColor: concrete.stone, padding: 12, backgroundColor: concrete.paper, gap: 4 },
+  statLabel: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, color: concrete.aggregate, letterSpacing: 0 },
+  statValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 18, marginTop: 4 },
 
   legendRow: { flexDirection: 'row', gap: 16, marginBottom: 10 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   legendSwatch: { width: 10, height: 10, borderWidth: 1, borderColor: concrete.void },
-  legendLabel: { fontFamily: monoBold, fontSize: 9, color: concrete.aggregate, letterSpacing: 1 },
+  legendLabel: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, color: concrete.aggregate, letterSpacing: 0 },
   chartArea: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: 4,
     borderBottomWidth: 2,
     borderLeftWidth: 2,
-    borderColor: concrete.void,
+    borderColor: concrete.stone,
     paddingHorizontal: 6,
   },
   chartBarGroup: { flex: 1, flexDirection: 'row', gap: 2, alignItems: 'flex-end', minWidth: 0 },
   chartBar: { flex: 1, minWidth: 0 },
   chartLabels: { flexDirection: 'row', gap: 4, paddingHorizontal: 6, marginTop: 4 },
-  chartLabel: { flex: 1, fontFamily: mono, fontSize: 8, color: concrete.aggregate, textAlign: 'center' },
+  chartLabel: { flex: 1, fontFamily: bodyFont, fontSize: 8, color: concrete.aggregate, textAlign: 'center' },
 
   trendList: { gap: 12 },
-  trendCard: { borderWidth: 1.5, borderColor: concrete.stone, padding: 10, gap: 4 },
-  trendMonth: { fontFamily: monoBold, fontSize: 11, color: concrete.void, marginBottom: 2, letterSpacing: 1 },
+  trendCard: { borderWidth: 0, borderRadius: 6, borderColor: concrete.stone, padding: 10, gap: 4 },
+  trendMonth: { fontFamily: headingFont, fontWeight: '600', fontSize: 11, color: concrete.void, marginBottom: 2, letterSpacing: 0 },
   trendRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  trendLabel: { fontFamily: mono, fontSize: 12, color: concrete.aggregate },
-  trendValue: { fontFamily: monoBold, fontSize: 12 },
+  trendLabel: { fontFamily: bodyFont, fontSize: 12, color: concrete.aggregate },
+  trendValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 12 },
   trendChangeRow: { flexDirection: 'row', gap: 12, marginTop: 4 },
-  trendChange: { fontFamily: mono, fontSize: 10 },
+  trendChange: { fontFamily: bodyFont, fontSize: 10 },
 
   catBarWrap: { marginBottom: 14 },
   catBarHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-  catBarName: { fontFamily: mono, fontSize: 13, color: concrete.void },
-  catBarValue: { fontFamily: monoBold, fontSize: 13, color: concrete.void },
+  catBarName: { fontFamily: bodyFont, fontSize: 13, color: concrete.void },
+  catBarValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 13, color: concrete.void },
   catBarTrack: { height: 8, backgroundColor: concrete.stone },
   catBarFill: { height: '100%', backgroundColor: oxide.main },
 
   forecastRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, marginTop: 12, marginBottom: 12 },
   forecastItem: { minWidth: '40%', gap: 4 },
-  forecastValue: { fontFamily: monoBold, fontSize: 17 },
+  forecastValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 17 },
   forecastCategories: { gap: 8, borderTopWidth: 1.5, borderTopColor: concrete.stone, paddingTop: 10 },
   forecastCatRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
 
   changeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  changeCard: { borderWidth: 2, borderColor: concrete.void, padding: 10, minWidth: '46%', gap: 6 },
+  changeCard: { borderWidth: 1, borderRadius: 8, borderColor: concrete.stone, padding: 10, minWidth: '46%', gap: 6 },
   changeCardRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  changeValue: { fontFamily: monoBold, fontSize: 11 },
+  changeValue: { fontFamily: headingFont, fontWeight: '600', fontSize: 11 },
 });
