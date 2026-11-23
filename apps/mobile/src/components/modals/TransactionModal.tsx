@@ -175,7 +175,7 @@ export default function TransactionModal({ open, transaction, categories, onSave
       <Field
         label="Currency"
         value={form.currency ?? 'USD'}
-        onChangeText={(text) => setForm((f) => ({ ...f, currency: text.toUpperCase().slice(0, 3) }))}
+        onChangeText={(text) => setForm((f) => ({ ...f, currency: text.slice(0, 3) }))}
         autoCapitalize="characters"
         maxLength={3}
       />

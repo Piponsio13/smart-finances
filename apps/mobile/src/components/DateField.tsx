@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { concrete } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { concrete, designTokens } from '../theme/palette';
+import { bodyFont, headingFont } from '../theme/typography';
 
 interface DateFieldProps {
   label: string;
@@ -21,7 +21,7 @@ export default function DateField({ label, value, onChange, mode = 'date' }: Dat
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label.toUpperCase()}</Text>
+      <Text style={styles.label}>{label}</Text>
       <Pressable style={styles.trigger} onPress={() => setOpen(true)}>
         <Text style={styles.value}>{displayText}</Text>
       </Pressable>
@@ -49,17 +49,17 @@ export default function DateField({ label, value, onChange, mode = 'date' }: Dat
 const styles = StyleSheet.create({
   container: { gap: 6 },
   label: {
-    fontFamily: monoBold,
-    fontSize: 10,
-    letterSpacing: 1.2,
+    fontFamily: headingFont, fontWeight: '600',
+    fontSize: 12,
+    letterSpacing: 0,
     color: concrete.aggregate,
   },
   trigger: {
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderWidth: 1, borderRadius: designTokens.radii.control,
+    borderColor: concrete.stone,
     backgroundColor: concrete.paper,
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  value: { fontFamily: mono, fontSize: 15, color: concrete.void },
+  value: { fontFamily: bodyFont, fontSize: 15, color: concrete.void },
 });

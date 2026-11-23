@@ -52,12 +52,12 @@ function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
             <Typography
               sx={{
                 mb: 1,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: 1.5,
+                textTransform: 'none',
+                letterSpacing: 0,
                 color: concrete.aggregate,
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: 'inherit',
               }}
             >
               {title}
@@ -66,9 +66,9 @@ function StatCard({ title, value, icon, color, bgColor }: StatCardProps) {
               sx={{
                 fontWeight: 700,
                 color,
-                fontSize: { xs: 20, sm: 22 },
+                fontSize: { xs: 25, sm: 28 },
                 overflowWrap: 'anywhere',
-                fontFamily: '"Space Mono", monospace',
+                fontFamily: 'inherit',
                 letterSpacing: -0.5,
               }}
             >
@@ -158,15 +158,15 @@ export default function Dashboard() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Box>
-        <Typography variant="h4" component="h1">Dashboard</Typography>
+        <Typography variant="h4" component="h1">Your money, at a glance.</Typography>
         <Typography
           sx={{
             mt: 0.5,
             fontSize: 12,
-            fontFamily: '"Space Mono", monospace',
+            fontFamily: 'inherit',
             color: concrete.aggregate,
-            textTransform: 'uppercase',
-            letterSpacing: 1,
+            textTransform: 'none',
+            letterSpacing: 0,
           }}
         >
           {MONTH_NAMES[data.month - 1]} {data.year}
@@ -302,7 +302,7 @@ export default function Dashboard() {
                       </Box>
                       <Typography
                         sx={{
-                          fontFamily: '"Space Mono", monospace',
+                          fontFamily: 'inherit',
                           fontWeight: 700,
                           fontSize: 13,
                           color: tx.type === 'INCOME' ? moss.main : oxide.main,

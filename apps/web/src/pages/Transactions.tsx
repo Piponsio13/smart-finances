@@ -69,7 +69,7 @@ export default function Transactions() {
     async function init() {
       setLoading(true);
       const [txResult, catResult] = await Promise.allSettled([
-        transactionsApi.getAll(filters),
+        transactionsApi.getAll(),
         categoriesApi.getAll(),
       ]);
       // Settled independently — one failing shouldn't wipe out the other.
@@ -153,7 +153,7 @@ export default function Transactions() {
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Transactions</Typography>
           <Typography
-            sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}
+            sx={{ mt: 0.5, fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}
           >
             Manage your income and expenses
           </Typography>
@@ -307,7 +307,7 @@ export default function Transactions() {
                       <TableCell align="right">
                         <Typography
                           sx={{
-                            fontFamily: '"Space Mono", monospace',
+                            fontFamily: 'inherit',
                             fontWeight: 700,
                             fontSize: 13,
                             color: tx.type === 'INCOME' ? moss.main : oxide.main,

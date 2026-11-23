@@ -11,7 +11,7 @@ import Fab from '../components/Fab';
 import StatusBadge from '../components/StatusBadge';
 import RecurringModal from '../components/modals/RecurringModal';
 import { concrete, moss, oxide, ochre } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { recurringApi, type RecurringTransaction } from '../api/recurring';
 import { categoriesApi, type Category } from '../api/categories';
 import type { ApiError } from '../api/client';
@@ -179,11 +179,11 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 },
   flexShrink: { flex: 1, marginRight: 8 },
-  description: { fontFamily: monoBold, fontSize: 14, color: concrete.void },
-  muted: { fontFamily: mono, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
+  description: { fontFamily: headingFont, fontWeight: '600', fontSize: 14, color: concrete.void },
+  muted: { fontFamily: bodyFont, fontSize: 11, color: concrete.aggregate, marginTop: 2 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   metaRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  freqLabel: { fontFamily: monoBold, fontSize: 10, color: ochre.main, letterSpacing: 1 },
+  freqLabel: { fontFamily: headingFont, fontWeight: '600', fontSize: 12, color: ochre.main, letterSpacing: 0 },
   footerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  amount: { fontFamily: monoBold, fontSize: 16 },
+  amount: { fontFamily: headingFont, fontWeight: '600', fontSize: 16 },
 });

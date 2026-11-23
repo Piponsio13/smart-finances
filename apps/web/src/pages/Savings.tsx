@@ -23,7 +23,7 @@ import SavingsModal from '../components/SavingsModal';
 import ContributionModal from '../components/ContributionModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
-import { concrete, moss, ochre } from '../theme/palette';
+import { brand, concrete, moss, ochre } from '../theme/palette';
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
@@ -41,7 +41,7 @@ function GoalCard({
   onContribute: () => void;
 }) {
   const progress = Math.min(goal.progressPercent, 100);
-  const progressColor = goal.completed ? moss.main : progress > 75 ? ochre.main : concrete.void;
+  const progressColor = goal.completed ? moss.main : progress > 75 ? ochre.main : brand.main;
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -69,7 +69,7 @@ function GoalCard({
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0 }}>
             {goal.completed && (
-              <Chip label="COMPLETE" size="small" sx={{ bgcolor: moss.light, color: moss.main, fontSize: 10, fontWeight: 700 }} />
+              <Chip label="Complete" size="small" sx={{ bgcolor: moss.light, color: moss.main, fontSize: 12, fontWeight: 700 }} />
             )}
             <Tooltip title="Add contribution">
               <IconButton size="small" onClick={onContribute} sx={{ color: moss.main }}>
@@ -170,7 +170,7 @@ export default function Savings() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Savings Goals</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
             Track your savings progress
           </Typography>
         </Box>
@@ -183,19 +183,19 @@ export default function Savings() {
 
       {!loading && goals.length > 0 && (
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Box sx={{ p: 2, border: `2px solid ${concrete.void}` }}>
-            <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Box sx={{ p: 2, border: `1px solid ${concrete.stone}` }}>
+            <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
               Total Saved
             </Typography>
-            <Typography sx={{ fontSize: 20, fontWeight: 700, color: moss.main, fontFamily: '"Space Mono", monospace' }}>
+            <Typography sx={{ fontSize: 20, fontWeight: 700, color: moss.main, fontFamily: 'inherit' }}>
               {formatCurrency(totalSaved)}
             </Typography>
           </Box>
-          <Box sx={{ p: 2, border: `2px solid ${concrete.void}` }}>
-            <Typography sx={{ fontSize: 10, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Box sx={{ p: 2, border: `1px solid ${concrete.stone}` }}>
+            <Typography sx={{ fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
               Goals Completed
             </Typography>
-            <Typography sx={{ fontSize: 20, fontWeight: 700, color: concrete.void, fontFamily: '"Space Mono", monospace' }}>
+            <Typography sx={{ fontSize: 20, fontWeight: 700, color: concrete.void, fontFamily: 'inherit' }}>
               {completedCount} / {goals.length}
             </Typography>
           </Box>

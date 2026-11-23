@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { concrete } from '../theme/palette';
+import { brand, concrete } from '../theme/palette';
 
 interface FabProps {
   onPress: () => void;
@@ -8,7 +8,7 @@ interface FabProps {
 
 export default function Fab({ onPress }: FabProps) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.fab, pressed && styles.pressed]}>
+    <Pressable accessibilityRole="button" accessibilityLabel="Add new item" onPress={onPress} style={({ pressed }) => [styles.fab, pressed && styles.pressed]}>
       <Ionicons name="add" size={26} color={concrete.paper} />
     </Pressable>
   );
@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     bottom: 20,
     width: 52,
     height: 52,
-    borderRadius: 0,
-    backgroundColor: concrete.void,
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderRadius: 26,
+    backgroundColor: brand.main,
+    borderWidth: 1,
+    borderColor: concrete.stone,
     alignItems: 'center',
     justifyContent: 'center',
   },

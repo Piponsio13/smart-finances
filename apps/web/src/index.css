@@ -1,26 +1,12 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import './theme/tokens.css';
 
-body {
-  font-family: 'Space Mono', 'Courier New', monospace;
-  background-color: #E4E0D6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #E4E0D6;
-  border-left: 2px solid #1A1918;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1A1918;
-}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--sf-background); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--sf-background); }
+::-webkit-scrollbar-thumb { background: #bac8b1; border: 2px solid var(--sf-background); border-radius: 8px; }
+.app-main > div > div:first-child { flex-wrap: wrap; gap: 16px; }
+.app-main .MuiTypography-h4 { font-size: clamp(25px, 2.5vw, 32px); }
+.app-main .MuiTableContainer-root { max-width: 100%; overflow-x: auto; }
+@media (max-width: 600px) { .app-main > div > div:first-child > .MuiButton-root { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }

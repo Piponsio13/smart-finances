@@ -22,7 +22,7 @@ import { categoriesApi, type Category } from '../api/categories';
 import BudgetModal from '../components/BudgetModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import type { ApiError } from '../api/client';
-import { concrete, oxide, ochre } from '../theme/palette';
+import { brand, concrete, oxide, ochre } from '../theme/palette';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -50,7 +50,7 @@ function BudgetCard({
     ? oxide.main
     : progress > 80
     ? ochre.main
-    : concrete.void;
+    : brand.main;
 
   return (
     <Card>
@@ -68,7 +68,7 @@ function BudgetCard({
             {budget.exceeded && (
               <Chip
                 icon={<WarningAmberOutlinedIcon />}
-                label="OVER BUDGET"
+                label="Over budget"
                 size="small"
                 sx={{ bgcolor: oxide.light, color: oxide.main, borderColor: oxide.main }}
               />
@@ -192,7 +192,7 @@ export default function Budgets() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant="h4" sx={{ fontSize: 24 }}>Budgets</Typography>
-          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: '"Space Mono", monospace', color: concrete.aggregate, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Typography sx={{ mt: 0.5, fontSize: 12, fontFamily: 'inherit', color: concrete.aggregate, textTransform: 'none', letterSpacing: 0 }}>
             Track your spending limits per category
           </Typography>
         </Box>

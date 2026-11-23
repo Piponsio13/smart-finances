@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
-import { concrete } from '../theme/palette';
+import { concrete, designTokens } from '../theme/palette';
 
 interface CardProps {
   children: ReactNode;
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: concrete.paper,
     borderWidth: 1,
     borderColor: concrete.stone,
-    borderRadius: 12,
+    borderRadius: designTokens.radii.card,
     padding: 16,
   },
 });

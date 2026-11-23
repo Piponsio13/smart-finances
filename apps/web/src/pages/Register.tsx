@@ -1,17 +1,12 @@
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Link,
-  Alert,
-} from '@mui/material';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import SocialSignIn from '../components/SocialSignIn';
+import AuthLayout from '../components/auth/AuthLayout';
+import AuthField from '../components/auth/AuthField';
 import { authApi } from '../api/auth';
 import { useAuth } from '../context/authState';
 import type { ApiError } from '../api/client';
-import { concrete } from '../theme/palette';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
   const { login } = useAuth();
@@ -51,150 +46,24 @@ export default function Register() {
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        bgcolor: '#E4E0D6',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        p: 2,
-      }}
-    >
-      <Box sx={{ width: '100%', maxWidth: 400 }}>
-        <Box sx={{ mb: 4 }}>
-          <Typography
-            sx={{
-              fontFamily: '"Space Mono", monospace',
-              fontWeight: 700,
-              fontSize: 28,
-              letterSpacing: 3,
-              textTransform: 'uppercase',
-              lineHeight: 1.1,
-              color: concrete.void,
-            }}
-          >
-            SMART
-            <br />
-            FINANCES
-          </Typography>
-          <Box sx={{ width: 60, height: 4, bgcolor: concrete.stone, mt: 1.5, border: `1px solid ${concrete.void}` }} />
-        </Box>
-
-        <Box
-          sx={{
-            border: `3px solid ${concrete.void}`,
-            boxShadow: `8px 8px 0px ${concrete.void}`,
-            bgcolor: concrete.paper,
-            p: 4,
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{ mb: 0.5, fontSize: 18, letterSpacing: 2, fontWeight: 700 }}
-          >
-            CREATE ACCOUNT
-          </Typography>
-          <Typography
-            sx={{ mb: 3, fontSize: 12, color: concrete.aggregate, fontFamily: '"Space Mono", monospace' }}
-          >
-            Start managing your finances today
-          </Typography>
-
-          {error && (
-            <Alert severity="error" sx={{ mb: 2.5 }}>
-              {error}
-            </Alert>
-          )}
-
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}
-          >
-            <TextField
-              label="Full Name"
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              required
-              fullWidth
-              autoFocus
-            />
-
-            <TextField
-              label="Email"
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-              required
-              fullWidth
-              autoComplete="email"
-            />
-
-            <TextField
-              label="Password"
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-              required
-              fullWidth
-              autoComplete="new-password"
-              helperText="Minimum 8 characters"
-              slotProps={{ htmlInput: { minLength: 8 } }}
-            />
-
-            <TextField
-              label="Confirm Password"
-              type="password"
-              value={form.confirm}
-              onChange={(e) => setForm((f) => ({ ...f, confirm: e.target.value }))}
-              required
-              fullWidth
-              autoComplete="new-password"
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              disabled={loading || accountCreated}
-              fullWidth
-              sx={{ mt: 0.5, py: 1.5, fontSize: 13 }}
-            >
-              {loading ? 'CREATING...' : 'CREATE ACCOUNT'}
-            </Button>
-          </Box>
-
-          <Box
-            sx={{
-              mt: 3,
-              pt: 2,
-              borderTop: `2px solid ${concrete.void}`,
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography
-              sx={{ fontSize: 11, fontFamily: '"Space Mono", monospace', color: concrete.aggregate }}
-            >
-              HAVE AN ACCOUNT?{' '}
-              <Link
-                component={RouterLink}
-                to="/login"
-                sx={{
-                  color: concrete.void,
-                  fontWeight: 700,
-                  textDecorationColor: concrete.stone,
-                  textDecorationThickness: 2,
-                  '&:hover': { color: concrete.void, bgcolor: concrete.stone },
-                }}
-              >
-                SIGN IN
-              </Link>
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+    <AuthLayout mode="register">
+      {error && <div className={accountCreated ? 'auth-notice auth-notice-success' : 'auth-notice'} role="alert">
+        {error} {accountCreated && <Link to="/login">Continue to sign in →</Link>}
+      </div>}
+      <SocialSignIn disabled={loading} onBusy={setLoading} onError={setError} />
+      <form className="auth-form" onSubmit={handleSubmit} aria-label="Create an account with email" aria-busy={loading}>
+        <AuthField id="register-name" label="Full Name" autoComplete="name" placeholder="Your full name"
+          required disabled={loading || accountCreated} value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+        <AuthField id="register-email" label="Email" type="email" autoComplete="email" placeholder="you@example.com"
+          required disabled={loading || accountCreated} value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+        <AuthField id="register-password" label="Password" type="password" autoComplete="new-password" placeholder="Create a password" hint="Use at least 8 characters." minLength={8}
+          required disabled={loading || accountCreated} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} />
+        <AuthField id="register-confirm" label="Confirm Password" type="password" autoComplete="new-password" placeholder="Enter your password again"
+          required disabled={loading || accountCreated} value={form.confirm} onChange={e => setForm(f => ({ ...f, confirm: e.target.value }))} />
+        <button className="auth-submit" type="submit" disabled={loading || accountCreated}>
+          {loading ? 'Creating your account…' : 'Create account'} {!loading && <ArrowForwardRoundedIcon aria-hidden="true" />}
+        </button>
+      </form>
+    </AuthLayout>
   );
 }

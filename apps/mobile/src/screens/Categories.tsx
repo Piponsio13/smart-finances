@@ -9,7 +9,7 @@ import Banner from '../components/Banner';
 import Fab from '../components/Fab';
 import CategoryModal from '../components/modals/CategoryModal';
 import { concrete, moss, oxide } from '../theme/palette';
-import { mono, monoBold } from '../theme/typography';
+import { bodyFont, headingFont } from '../theme/typography';
 import { categoriesApi, type Category } from '../api/categories';
 import type { ApiError } from '../api/client';
 
@@ -140,25 +140,25 @@ const styles = StyleSheet.create({
   sectionIcon: {
     width: 36,
     height: 36,
-    borderWidth: 2,
-    borderColor: concrete.void,
+    borderWidth: 1, borderRadius: 8,
+    borderColor: concrete.stone,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sectionTitle: { fontFamily: monoBold, fontSize: 13 },
-  sectionCount: { fontFamily: mono, fontSize: 9, color: concrete.aggregate, letterSpacing: 1, marginTop: 2 },
+  sectionTitle: { fontFamily: headingFont, fontWeight: '600', fontSize: 13 },
+  sectionCount: { fontFamily: bodyFont, fontSize: 11, color: concrete.aggregate, letterSpacing: 0, marginTop: 2 },
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    borderWidth: 1.5,
+    borderWidth: 0, borderRadius: 6,
     borderColor: concrete.stone,
     backgroundColor: concrete.bg,
     paddingVertical: 6,
     paddingHorizontal: 10,
   },
-  chipLabel: { fontFamily: mono, fontSize: 12, color: concrete.void },
+  chipLabel: { fontFamily: bodyFont, fontSize: 12, color: concrete.void },
   chipDelete: { padding: 2 },
-  muted: { fontFamily: mono, fontSize: 12, color: concrete.aggregate },
+  muted: { fontFamily: bodyFont, fontSize: 12, color: concrete.aggregate },
 });
